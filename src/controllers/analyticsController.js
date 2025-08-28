@@ -15,22 +15,42 @@ const getprice = async (ticker) => {
 };
 
 const getPortfolioMetrics = async (req, res) => {
-  let user_id = mongoose.Types.ObjectId.createFromHexString(req.user.id);
-  let assets = await fetchPortfolioData(user_id);
-  const updatedAssets = [];
-  for (const asset of assets) {
-    let price = await getprice(asset.cryptoName);
-    let returns = asset.totalAmt * price - asset.totalAmt * asset.avgBuyPrice;
-    let per_return = (100*returns / (asset.totalAmt * asset.avgBuyPrice)).toFixed(4);
+  try {
+    const user_id = mongoose.Types.ObjectId.createFromHexString(req.user.id);
+    const assets = await fetchPortfolioData(user_id);
 
-    console.log(returns, per_return);
-    updatedAssets.push({
-      ...asset,
-      currPrice: price,
-      returns: returns,per_return:per_return
+    const pricePromises = assets.map(asset => getprice(asset.cryptoName));
+    const prices = await Promise.all(pricePromises);
+
+    const updatedAssets = assets.map((asset, index) => {
+      const price = prices[index];
+      if (price === null) {
+        // Handle case where price fetch failed for an asset
+        return {
+          ...asset,
+          currPrice: null,
+          returns: 0,
+          per_return: 0,
+          error: "Could not fetch current price."
+        };
+      }
+      const returns = asset.totalAmt * price - asset.totalAmt * asset.avgBuyPrice;
+      const per_return = (100 * returns / (asset.totalAmt * asset.avgBuyPrice)).toFixed(4);
+
+      return {
+        ...asset,
+        currPrice: price,
+        returns: returns,
+        per_return: per_return
+      };
     });
+
+    res.json(updatedAssets);
+  } catch (error) {
+    // Catches errors from createFromHexString or fetchPortfolioData
+    console.error("Error in getPortfolioMetrics:", error);
+    res.status(500).json({ error: "An internal server error occurred." });
   }
-  res.json(updatedAssets);
 };
 
 module.exports = { getPortfolioMetrics };
