@@ -7,7 +7,7 @@ const getprice = async (ticker) => {
       `https://api.binance.com/api/v3/ticker/price?symbol=${ticker}`
     );
     let data = await response.json();
-    return data.price;
+    return parseFloat(data.price);
   } catch (error) {
     console.error("Error fetching price:", error);
     return null;
@@ -25,7 +25,6 @@ const getPortfolioMetrics = async (req, res) => {
     const updatedAssets = assets.map((asset, index) => {
       const price = prices[index];
       if (price === null) {
-        // Handle case where price fetch failed for an asset
         return {
           ...asset,
           currPrice: null,
