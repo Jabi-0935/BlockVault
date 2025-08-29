@@ -1,17 +1,23 @@
 const { fetchPortfolioData } = require("./portfolioController");
 const mongoose = require("mongoose");
+const api  = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest"
+const CMCKEY='36125ff2-3020-4eeb-8fd9-1aa74c2d9dc1'; 
+
+
 
 const getprice = async (ticker) => {
-  try {
-    let response = await fetch(
-      `https://api.binance.com/api/v3/ticker/price?symbol=${ticker}`
-    );
-    let data = await response.json();
-    return parseFloat(data.price);
-  } catch (error) {
-    console.error("Error fetching price:", error);
-    return null;
+  const params= {
+    symbol:ticker,
+    convert:'USD'
   }
+  const qstring = new URLSearchParams(params);
+  let rawdata = await fetch(`${api}?${qstring}`,{
+    headers:{
+      'X-CMC_PRO_API_KEY':CMCKEY
+    },
+  })
+  let jdata = await rawdata.json();
+  return jdata['data'][`${ticker}`].quote.USD.price;
 };
 
 const getPortfolioMetrics = async (req, res) => {
@@ -51,5 +57,13 @@ const getPortfolioMetrics = async (req, res) => {
     res.status(500).json({ error: "An internal server error occurred." });
   }
 };
+
+
+const main = async ()=>{
+  let price = await getprice('BTC');
+  console.log(price);
+}
+
+main();
 
 module.exports = { getPortfolioMetrics };
