@@ -1,7 +1,10 @@
 const { fetchPortfolioData } = require("./portfolioController");
+const path = require('path')
 const mongoose = require("mongoose");
+require('dotenv').config({path: path.resolve(__dirname, '../../.env'),quiet:true})
 const api  = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest"
-const CMCKEY='36125ff2-3020-4eeb-8fd9-1aa74c2d9dc1'; 
+const CMCKEY=process.env.CMC_PRO_API_KEY
+console.log(CMCKEY);
 
 
 
