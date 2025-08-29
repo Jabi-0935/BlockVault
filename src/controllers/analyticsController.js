@@ -40,7 +40,7 @@ const getPortfolioMetrics = async (req, res) => {
         };
       }
       const returns = (asset.totalAmt * price - asset.totalAmt * asset.avgBuyPrice).toFixed(4);
-      const per_return = (100 * returns / (asset.totalAmt * asset.avgBuyPrice)).toFixed(4);
+      const per_return = ((100 * returns) / (asset.totalAmt * asset.avgBuyPrice)).toFixed(4);
 
       return {
         ...asset,

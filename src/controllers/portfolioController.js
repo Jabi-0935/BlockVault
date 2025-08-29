@@ -63,6 +63,17 @@ const fetchPortfolioData = async (user_id) => {
   }
 };
 
+const getTransacations = async (req, res) => {
+  try {
+    const user_id = mongoose.Types.ObjectId.createFromHexString(req.user.id);
+    const assets = await Asset.find({ userid: user_id });
+    res.json({ transactions: assets });
+  } catch (err) {
+    console.error("Error fetching transactions:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 const getPortfolio = async (req, res) => {
   let user_id = mongoose.Types.ObjectId.createFromHexString(req.user.id);
   try {
@@ -117,4 +128,4 @@ const deleteCrypto = async (req, res) => {
   }
 };
 
-module.exports = { addCrypto, getPortfolio, deleteCrypto, updateCrypto,fetchPortfolioData };
+module.exports = { addCrypto, getPortfolio, deleteCrypto, updateCrypto,fetchPortfolioData, getTransacations};
