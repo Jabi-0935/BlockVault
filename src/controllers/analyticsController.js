@@ -4,9 +4,6 @@ const mongoose = require("mongoose");
 require('dotenv').config({path: path.resolve(__dirname, '../../.env'),quiet:true})
 const api  = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest"
 const CMCKEY=process.env.CMC_PRO_API_KEY
-console.log(CMCKEY);
-
-
 
 const getprice = async (ticker) => {
   const params= {
@@ -62,11 +59,5 @@ const getPortfolioMetrics = async (req, res) => {
 };
 
 
-const main = async ()=>{
-  let price = await getprice('BTC');
-  console.log(price);
-}
-
-main();
 
 module.exports = { getPortfolioMetrics };
