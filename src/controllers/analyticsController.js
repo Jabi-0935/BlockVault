@@ -17,7 +17,7 @@ const getprice = async (ticker) => {
     },
   })
   let jdata = await rawdata.json();
-  return jdata['data'][`${ticker}`].quote.USD.price;
+  return (jdata['data'][`${ticker}`].quote.USD.price).toFixed(4);
 };
 
 const getPortfolioMetrics = async (req, res) => {
@@ -39,7 +39,7 @@ const getPortfolioMetrics = async (req, res) => {
           error: "Could not fetch current price."
         };
       }
-      const returns = asset.totalAmt * price - asset.totalAmt * asset.avgBuyPrice;
+      const returns = (asset.totalAmt * price - asset.totalAmt * asset.avgBuyPrice).toFixed(4);
       const per_return = (100 * returns / (asset.totalAmt * asset.avgBuyPrice)).toFixed(4);
 
       return {
