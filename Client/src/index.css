@@ -1,1 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import url('https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css');
 @import "tailwindcss";
+
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background:#0d1216;
+  color:rgb(223,229,236);
+}
