@@ -9,8 +9,8 @@ const NavBar = () => {
         <a href="/" className="font-bold">BlockVault</a>
       </div>
       <div className="auths flex gap-4 font-medium">
-        <a className="px-3 py-1 border border-gray-600 rounded-xl hover:bg-gray-700 transition" href="/login">Login</a>
-        <a className="px-3 py-1 border border-gray-600 rounded-xl hover:bg-gray-700 transition" href="/signup">SignUp</a>
+        <a className="px-3 py-1 border border-gray-600 rounded-xl hover:bg-gray-700 transition" href="/about">About</a>
+        <a className="px-3 py-1 border border-gray-600 rounded-xl hover:bg-gray-700 transition" href="/contact">Contact</a>
       </div>
     </nav>
   );

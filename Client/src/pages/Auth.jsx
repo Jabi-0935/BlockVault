@@ -1,0 +1,189 @@
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+const apiUrl = import.meta.env.VITE_API_URL;
+
+const Auth = () => {
+  const [Message, setMessage] = useState("");
+  const [isLogin, setLogin] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      const { confirmPassword, ...submit } = data;
+      const url = !isLogin ? `${apiUrl}/signup` : `${apiUrl}/login`;
+      const params = {
+        ...(!isLogin && { name: submit.name }),
+        email: submit.email,
+        password: submit.password,
+      };
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": "0935",
+        },
+        body: JSON.stringify(params),
+      });
+
+      const result = await res.json();
+      if (!res.ok) {
+        setMessage(
+          <span className="text-red-500 text-xs">*{result.error}</span>
+        );
+        return;
+      }
+      setMessage(
+        <span className="text-green-500 text-xs">*{result.message}</span>
+      );
+    } catch (error) {
+      setMessage(
+        <span className="text-red-500 text-xs">Network error occurred</span>
+      );
+      console.error("Fetch error:", error);
+    }
+  };
+  return (
+    <>
+      <div className="p-3 sm:p-5 w-full border-b border-gray-300 min-h-[80vh] flex flex-col flex-grow items-center justify-center text-center bg-[#0d1216] text-white">
+        <div className="h-auto min-h-[450px] w-[350px] sm:w-[400px] md:w-[450px] p-3 sm:p-5 border border-gray-300 rounded-2xl flex flex-col items-center justify-start bg-gray-800">
+          <div className="options w-full px-4 flex justify-around m-2">
+            <button
+              onClick={() => setLogin(true)}
+              className="border-1 border-white rounded-sm py-2 px-3 box-border text-sm"
+            >
+              Login
+            </button>
+            <button
+              onClick={() => setLogin(false)}
+              className="border-1 border-white rounded-sm py-2 px-3 box-border text-sm"
+            >
+              Signup
+            </button>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-bold mt-2 mb-2 text-white">
+            {isLogin ? "Log In" : "Create Account"}
+          </h1>
+
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-2 w-full p-1 sm:p-2"
+          >
+            {/* Full Name */}
+            {!isLogin && (
+              <div className="flex flex-col w-full">
+                <input
+                  className={`border-2 ${
+                    errors.name ? "border-red-500" : "border-gray-600"
+                  } bg-gray-700 text-white placeholder-gray-400 hover:border-cyan-400 focus:border-blue-500 rounded-md p-2 sm:p-3 text-sm sm:text-base transition-all duration-200 outline-none`}
+                  type="text"
+                  placeholder="Full Name"
+                  {...register("name", {
+                    required: "Full name is required",
+                    minLength: {
+                      value: 3,
+                      message: "Name must be at least 3 characters",
+                    },
+                  })}
+                />
+                <span className="text-red-400 text-xs h-4">
+                  {errors.name?.message || ""}
+                </span>
+              </div>
+            )}
+
+            {/* Email */}
+            <div className="flex flex-col w-full">
+              <input
+                className={`border-2 ${
+                  errors.name ? "border-red-500" : "border-gray-600"
+                } bg-gray-700 text-white placeholder-gray-400 hover:border-cyan-400 focus:border-blue-500 rounded-md p-2 sm:p-3 text-sm sm:text-base transition-all duration-200 outline-none`}
+                type="email"
+                placeholder="Email"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^\S+@\S+$/i,
+                    message: "Invalid email address",
+                  },
+                })}
+              />
+              <span className="text-red-400 text-xs h-4">
+                {errors.email?.message || ""}
+              </span>
+            </div>
+
+            {/* Password */}
+            <div className="flex flex-col w-full">
+              <input
+                className={`border-2 ${
+                  errors.name ? "border-red-500" : "border-gray-600"
+                } bg-gray-700 text-white placeholder-gray-400 hover:border-cyan-400 focus:border-blue-500 rounded-md p-2 sm:p-3 text-sm sm:text-base transition-all duration-200 outline-none`}
+                type="password"
+                placeholder="Password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                })}
+              />
+              <span className="text-red-400 text-xs h-4">
+                {errors.password?.message || ""}
+              </span>
+            </div>
+
+            {/* Confirm Password */}
+            {!isLogin && (
+              <div className="flex flex-col w-full">
+                <input
+                  className={`border-2 ${
+                    errors.name ? "border-red-500" : "border-gray-600"
+                  } bg-gray-700 text-white placeholder-gray-400 hover:border-cyan-400 focus:border-blue-500 rounded-md p-2 sm:p-3 text-sm sm:text-base transition-all duration-200 outline-none`}
+                  type="password"
+                  placeholder="Confirm Password"
+                  {...register("confirmPassword", {
+                    required: "Please confirm your password",
+                    validate: (value) => {
+                      const password = watch("password");
+                      return value === password || "Passwords don't match";
+                    },
+                  })}
+                />
+                <span className="text-red-400 text-xs h-4">
+                  {errors.confirmPassword?.message || ""}
+                </span>
+              </div>
+            )}
+            {/* Replace {Message} with: */}
+            {/* Submit Button */}
+            <div className="submit flex items-center justify-between">
+              <button
+                type="submit"
+                className="border border-white w-fit h-fit text-white font-semibold py-2 px-4 text-sm sm:text-base rounded-md transition-all duration-200 self-center"
+              >
+                {!isLogin ? "Submit" : "Login"}
+              </button>
+              {!isLogin && (
+                <>
+                  <span className="text-xs sm:text-sm mb-1">Or</span>
+                  <button className="border border-white w-fit h-fit text-white font-semibold py-2 px-4 text-sm sm:text-base rounded-md transition-all duration-200 self-center">
+                    Signin as Guest
+                  </button>
+                </>
+              )}
+            </div>
+            <div className="h-4 text-xs mt-1">{Message && Message}</div>
+          </form>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Auth;
