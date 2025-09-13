@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import Toogle from "../components/Auth/Toogle";
 import InputField from "../components/Auth/InputField";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
