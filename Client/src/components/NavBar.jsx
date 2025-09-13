@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Logo from "../assets/Logo.png";
-import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -13,10 +14,10 @@ const NavBar = () => {
       {/* Logo Section */}
       <div className="logo flex items-center gap-1 sm:gap-2">
         <img src={Logo} alt="BlockVault" className="h-8 sm:h-10 w-auto" />
-        <a href="/" className="font-bold text-sm sm:text-base">
+        <Link to="/" className="font-bold text-sm sm:text-base">
           <span className="">BlockVault</span>
 
-        </a>
+        </Link>
       </div>
 
       {/* Desktop Navigation */}
@@ -37,12 +38,12 @@ const NavBar = () => {
             Login
           </button>
         )}
-        <a className="text-xs lg:text-sm px-2 lg:px-3 py-2 border border-gray-600 rounded-xl hover:bg-gray-700 transition" href="/about">
+        <Link className="text-xs lg:text-sm px-2 lg:px-3 py-2 border border-gray-600 rounded-xl hover:bg-gray-700 transition" href="/about">
           About
-        </a>
-        <a className="text-xs lg:text-sm px-2 lg:px-3 py-2 border border-gray-600 rounded-xl hover:bg-gray-700 transition" href="/contact">
+        </Link>
+        <Link className="text-xs lg:text-sm px-2 lg:px-3 py-2 border border-gray-600 rounded-xl hover:bg-gray-700 transition" href="/contact">
           Contact
-        </a>
+        </Link>
       </div>
 
       {/* Mobile Menu Button */}
@@ -79,20 +80,20 @@ const NavBar = () => {
                 Login
               </button>
             )}
-            <a 
+            <Link 
               className="text-sm px-3 py-2 border border-gray-600 rounded-xl hover:bg-gray-700 transition"
               href="/about"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               About
-            </a>
-            <a 
+            </Link>
+            <Link 
               className="text-sm px-3 py-2 border border-gray-600 rounded-xl hover:bg-gray-700 transition"
               href="/contact"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Contact
-            </a>
+            </Link>
           </div>
         </div>
       )}
