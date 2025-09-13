@@ -5,6 +5,8 @@ const apiUrl = import.meta.env.VITE_API_URL;
 const Auth = () => {
   const [Message, setMessage] = useState("");
   const [isLogin, setLogin] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -13,6 +15,7 @@ const Auth = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     try {
       const { confirmPassword, ...submit } = data;
       const url = !isLogin ? `${apiUrl}/signup` : `${apiUrl}/login`;
@@ -45,6 +48,8 @@ const Auth = () => {
         <span className="text-red-500 text-xs">Network error occurred</span>
       );
       console.error("Fetch error:", error);
+    }finally{
+      setIsLoading(false);
     }
   };
   return (
@@ -54,13 +59,15 @@ const Auth = () => {
           <div className="options w-full px-4 flex justify-around m-2">
             <button
               onClick={() => setLogin(true)}
-              className="border-1 border-white rounded-sm py-2 px-3 box-border text-sm"
+              className={`rounded-sm py-2 px-3 box-border text-sm
+                ${!isLogin?'border border-white text-white hover:bg-gray-700':'bg-white text-black font-bold'}`}
             >
               Login
             </button>
             <button
               onClick={() => setLogin(false)}
-              className="border-1 border-white rounded-sm py-2 px-3 box-border text-sm"
+              className={`rounded-sm py-2 px-3 box-border text-sm
+                ${isLogin?'border border-white text-white hover:bg-gray-700':'bg-white text-black font-bold'}`}
             >
               Signup
             </button>
@@ -165,14 +172,39 @@ const Auth = () => {
             <div className="submit flex items-center justify-between">
               <button
                 type="submit"
-                className="border border-white w-fit h-fit text-white font-semibold py-2 px-4 text-sm sm:text-base rounded-md transition-all duration-200 self-center"
+                disabled={
+                  isLoading ||
+                  (!isLogin
+                    ? !watch("name") ||
+                      !watch("email") ||
+                      !watch("password") ||
+                      !watch("confirmPassword") ||
+                      Object.keys(errors).length > 0
+                    : !watch("email") ||
+                      !watch("password") ||
+                      Object.keys(errors).length > 0)
+                }
+                className={`border border-white w-fit h-fit font-semibold py-2 px-4 text-sm sm:text-base rounded-md transition-all duration-200 self-center ${
+                  isLoading ||
+                  (!isLogin
+                    ? !watch("name") ||
+                      !watch("email") ||
+                      !watch("password") ||
+                      !watch("confirmPassword") ||
+                      Object.keys(errors).length > 0
+                    : !watch("email") ||
+                      !watch("password") ||
+                      Object.keys(errors).length > 0)
+                    ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                    : "text-white hover:bg-white hover:text-black"
+                }`}
               >
-                {!isLogin ? "Submit" : "Login"}
+                {isLoading ? "Loading..." : !isLogin ? "Submit" : "Login"}
               </button>
               {!isLogin && (
                 <>
                   <span className="text-xs sm:text-sm mb-1">Or</span>
-                  <button className="border border-white w-fit h-fit text-white font-semibold py-2 px-4 text-sm sm:text-base rounded-md transition-all duration-200 self-center">
+                  <button className="border border-white w-fit h-fit text-white font-semibold py-2 px-4 text-sm sm:text-base rounded-md transition-all duration-200 self-center hover:bg-gray-700">
                     Signin as Guest
                   </button>
                 </>
