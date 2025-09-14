@@ -6,15 +6,20 @@ const getPortfolioMetrics = async (req, res) => {
   try {
     const user_id = mongoose.Types.ObjectId.createFromHexString(req.user.id);
     const assets = await fetchPortfolioData(user_id);
+    let total_balance = 0;
+    let total_buy_price= 0;
+    let top = { name: null, pnl: -Infinity };
+    let loss = { name: null, pnl: Infinity };
 
+    
     const pricePromises = assets.map((asset) => {
       return getPrice(asset.cryptoName);
     });
     const prices = await Promise.all(pricePromises);
-
+    
     const updatedAssets = assets.map((asset, index) => {
       const price = parseFloat(prices[index]);
-
+      
       if (price === null) {
         return {
           ...asset,
@@ -30,6 +35,16 @@ const getPortfolioMetrics = async (req, res) => {
         (100 * returns) /
         (asset.totalAmt * asset.avgBuyPrice)
       ).toFixed(4);
+      total_balance+=price*asset.totalAmt;
+      total_buy_price+=asset.totalAmt*asset.avgBuyPrice;
+      
+      if (returns > top.pnl) {
+        top = { name: asset.cryptoName, pnl: returns };
+      }
+
+      if (returns < loss.pnl) {
+        loss = { name: asset.cryptoName, pnl: returns };
+      }
 
       return {
         ...asset,
@@ -39,7 +54,13 @@ const getPortfolioMetrics = async (req, res) => {
       };
     });
 
-    res.json(updatedAssets);
+    res.json({
+      gainer:top,
+      loser:loss,
+      balance:total_balance,
+      pnl:total_balance-total_buy_price,
+      per_asset:updatedAssets
+    });
   } catch (error) {
     console.error("Error in getPortfolioMetrics:", error);
     res.status(500).json({ error: "An internal server error occurred." });

@@ -15,7 +15,7 @@ const signup = async (req, res) => {
   });
   await user.save();
   return res.json({
-    message: `User Registered Successfully with Email`,
+    message: `User Registered Successfully`,
     email: `${req.body.email}`,
   });
 };
@@ -24,7 +24,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   let user = await User.findOne({ email });
   if (!user) {
-    return res.status(401).json({ error: "User not found, if not signed up please signup" });
+    return res.status(401).json({error: "User not found, if not signed up please signup" });
   }
 
   if (await bcryptjs.compare(password, user.passhash)) {
@@ -34,6 +34,7 @@ const login = async (req, res) => {
     }
     let jwt_token = generate_jwt(payload)
     return res.json({
+      status:"Success",
       message: `Welcome back ${user.name}`,
       token:jwt_token,
       user:{

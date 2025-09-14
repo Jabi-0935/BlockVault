@@ -8,6 +8,7 @@ export const useAuth=()=>useContext(AuthContext);
 export const AuthProvider =({children})=>{
     const [user,setUser] = useState(null);
     const [token,setToken] = useState(null);
+    const[loading,setLoading] = useState(true);
 
 
     useEffect(()=>{
@@ -17,6 +18,7 @@ export const AuthProvider =({children})=>{
             setUser(JSON.parse(savedUser));
             setToken(savedToken);
         }
+        setLoading(false);
     },[]);
 
     const login =(userData,authToken)=>{
@@ -38,6 +40,7 @@ export const AuthProvider =({children})=>{
         isAuthenticated: !!user && !!token,
         login,
         logout,
+        loading,
     };
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

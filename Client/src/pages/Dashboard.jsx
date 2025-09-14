@@ -1,15 +1,56 @@
-import React from 'react'
-import { useAuth } from '../context/AuthContext'
+  import React, { useEffect, useState } from "react";
+  import { useAuth } from "../context/AuthContext";
+  import Card from "../components/Card";
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const Dashboard = () => {
+    const { user,token } = useAuth(); 
+    const [details, setDetails] = useState({
+      gainer: {
+        name: "",
+        price: 0,
+      },
+      loser: {
+        name: "",
+        price: 0,
+      },
+      balance: 0,
+      pnl: 0,
+      per_asset: [],
+    });
 
+    const analytics = async () => {
+      const url = `${apiUrl}/analytics`;
+      // console.log(url)
 
-const Dashboard = () => {
-    const {user} = useAuth();
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const result = await res.json();
+      setDetails(result);
+      console.log(result)
+    };
 
-  return (
-    <div className="p-5 w-full border-b border-gray-300 min-h-[80vh] flex flex-col flex-grow items-center justify-center text-center">
-        <h1 className='text-4xl'>Welcome Back to Your Dashboard <br /><span className='font-bold'>{user.name.toUpperCase()}</span></h1>
-    </div>
-  )
-}
+    useEffect(() => {
+      analytics();
+    }, []);
 
-export default Dashboard
+    return (
+      <>
+        <div className="mx-4 my-2 ">
+          <h1 className="text-center text-2xl font-bold mb-2">Your Dashboard</h1>
+          <div className="card  grid grid-cols-4 grid-rows-1 gap-2">
+            <Card title="Current Balance" name='' value={details.balance.toFixed(2)} />
+            <Card title="Total Profit/Loss" name='' value={details.pnl.toFixed(2)} color={true}/>
+            <Card title={`Top Gainer`} name={`${details.gainer.name}: `} value={`${details.gainer.pnl ? parseFloat(details.gainer.pnl).toFixed(2) : 0.00}`} color={true} />
+            <Card title="Top Loser" name={`${details.loser.name}: `} value={`${details.loser.pnl ? parseFloat(details.loser.pnl).toFixed(2) : 0.00}`} color={true} />
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  export default Dashboard;
