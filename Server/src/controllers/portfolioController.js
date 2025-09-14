@@ -78,7 +78,6 @@ const getPortfolio = async (req, res) => {
   let user_id = mongoose.Types.ObjectId.createFromHexString(req.user.id);
   try {
     const formatted = await fetchPortfolioData(user_id);
-    console.log(formatted);
     
     res.json(formatted);
   } catch (err) {

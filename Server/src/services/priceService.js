@@ -7,7 +7,6 @@ const TTL =10*1000;
 
 const getPrice = async (ticker) => {
   if(cache[ticker] && Date.now()-cache[ticker].timestamp <TTL){
-    console.log('Used cache',cache);
     return cache[ticker].price;
   }
   const params= {
