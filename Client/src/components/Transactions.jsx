@@ -15,7 +15,7 @@ const Transactions = () => {
     });
     const result = await res.json();
     setAssets(result);
-    
+    console.log(result)
   };
   useEffect(() => {
     fetch_assets()
