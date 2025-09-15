@@ -83,7 +83,7 @@ const Dashboard = () => {
         </div>
         <div className="graphs"></div>
         <div className="transac mt-4 border-t p-2 border-white">
-          <div className="flex justify-between pr-10">
+          <div className="flex justify-between m-4">
           <h1 className="text-xl font-bold">Transactions</h1>
           <button className="text-xs lg:text-sm px-2 lg:px-2 py-1 border border-gray-600 rounded-xl hover:bg-gray-700 transition">
             Add</button>
