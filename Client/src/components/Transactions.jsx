@@ -38,7 +38,7 @@ const Transactions = () => {
         {Loading ? (
           // Skeleton table
           <table className="w-full my-3 text-sm sm:text-lg font-extralight text-center">
-            <thead>
+            <thead className="text-xs sm:text-sm">
               <tr>
                 <th>#</th>
                 <th>Coin</th>
