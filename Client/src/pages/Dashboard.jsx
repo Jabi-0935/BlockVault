@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import Card from "../components/Card";
+import Card from "../components/card.jsx";
 import Transactions from "../components/Transactions";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const Dashboard = () => {
   const { user, token } = useAuth();
+  const [Loading, setLoading] = useState(true);
   const [details, setDetails] = useState({
     gainer: {
       name: "",
@@ -21,9 +22,9 @@ const Dashboard = () => {
   });
 
   const analytics = async () => {
-    const url = `${apiUrl}/analytics`;
+    setLoading(true);
+    try{const url = `${apiUrl}/analytics`;
     // console.log(url)
-
     const res = await fetch(url, {
       method: "GET",
       headers: {
@@ -32,7 +33,13 @@ const Dashboard = () => {
       },
     });
     const result = await res.json();
-    setDetails(result);
+    setDetails(result);}
+    catch(err){
+      console.error(err);      
+    }
+    finally{
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -43,7 +50,7 @@ const Dashboard = () => {
     <>
       <div className="mx-4 my-2 ">
         <h1 className="text-center text-2xl font-bold mb-2">Your Dashboard</h1>
-        <div className="card grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="card grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Card
             title="Current Balance"
             name=""
@@ -76,7 +83,11 @@ const Dashboard = () => {
         </div>
         <div className="graphs"></div>
         <div className="transac mt-4 border-t p-2 border-white">
+          <div className="flex justify-between pr-10">
           <h1 className="text-xl font-bold">Transactions</h1>
+          <button className="text-xs lg:text-sm px-2 lg:px-2 py-1 border border-gray-600 rounded-xl hover:bg-gray-700 transition">
+            Add</button>
+          </div>
           <Transactions />
         </div>
       </div>

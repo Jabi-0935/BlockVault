@@ -152,7 +152,11 @@ const Auth = () => {
               {!isLogin && (
                 <>
                   <span className="text-xs sm:text-sm mb-1">Or</span>
-                  <button type='button' className="border border-white w-fit h-fit text-white font-semibold py-2 px-4 text-sm sm:text-base rounded-md transition-all duration-200 self-center hover:bg-gray-700">
+                  <button 
+                  onClick={()=>{
+                    setMessage("Not Available");
+                  }}
+                  type='button' className="border border-white w-fit h-fit text-white font-semibold py-2 px-4 text-sm sm:text-base rounded-md transition-all duration-200 self-center hover:bg-gray-700">
                     Signin as Guest
                   </button>
                 </>
