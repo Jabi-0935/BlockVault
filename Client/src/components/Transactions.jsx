@@ -45,6 +45,7 @@ const Transactions = () => {
                 <th>Amount</th>
                 <th>Buy Price</th>
                 <th>Date</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -65,6 +66,9 @@ const Transactions = () => {
                   <td>
                     <div className="h-4 w-24 bg-gray-700 rounded animate-pulse mx-auto"></div>
                   </td>
+                  <td>
+                    <div className="h-4 w-24 bg-gray-700 rounded animate-pulse mx-auto"></div>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -78,6 +82,7 @@ const Transactions = () => {
                 <th>Amount</th>
                 <th>Buy Price</th>
                 <th>Date</th>
+                <th></th>
               </tr>
             </thead>
             <tbody className="text-sm sm:text-base">
@@ -102,6 +107,7 @@ const Transactions = () => {
                     <td className="">
                       {new Date(tx.date).toLocaleDateString()}
                     </td>
+                    <td><button>edit</button></td>
                   </tr>
                 ))
               ) : (

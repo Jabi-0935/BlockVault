@@ -64,7 +64,7 @@ const Dashboard = () => {
           />
           <Card
             title={`Top Gainer`}
-            name={`${details.gainer.name}: `}
+            name={`${details.gainer.name}`}
             value={`${
               details.gainer.pnl
                 ? parseFloat(details.gainer.pnl).toFixed(2)
@@ -74,7 +74,7 @@ const Dashboard = () => {
           />
           <Card
             title="Top Loser"
-            name={`${details.loser.name}: `}
+            name={`${details.loser.name}`}
             value={`${
               details.loser.pnl ? parseFloat(details.loser.pnl).toFixed(2) : 0.0
             }`}
