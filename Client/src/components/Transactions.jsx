@@ -23,7 +23,7 @@ const Transactions = () => {
 
   return (
   <>
-  <table className="w-full my-3 text-sm font-extralight text-center">
+  <table className="w-full my-3 text-lg font-extralight text-center">
     <thead>
         <tr>
             <th>#</th>
@@ -37,11 +37,11 @@ const Transactions = () => {
         {Assets.transactions && Assets.transactions.length>0?(
             Assets.transactions.map((tx,idx)=>(
                 <tr key={idx}>
-                    <td>{idx+1}</td>
-                    <td>{tx.cryptoname}</td>
-                    <td>{tx.amt}</td>
-                    <td>$ {tx.buyprice}</td>
-                    <td>{new Date(tx.date).toLocaleDateString()}</td>
+                    <td className="">{idx+1}</td>
+                    <td className="">{tx.cryptoname}</td>
+                    <td className="">{tx.amt}</td>
+                    <td className="">$ {tx.buyprice}</td>
+                    <td className="">{new Date(tx.date).toLocaleDateString()}</td>
                 </tr>
             ))
         ):(
