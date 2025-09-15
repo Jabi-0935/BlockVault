@@ -50,7 +50,7 @@ const Dashboard = () => {
     <>
       <div className="mx-4 my-2 ">
         <h1 className="text-center text-2xl font-bold mb-2">Your Dashboard</h1>
-        <div className="card grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="card grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4">
           <Card
             title="Current Balance"
             name=""

@@ -4,7 +4,7 @@ const C_LOGO = import.meta.env.VITE_C_LOGO;
 const Card = (props) => {
   const [analytics, setAnalytics] = useState({});
   return (
-    <div className="border border-white rounded-xl py-2 px-4">
+    <div className="border border-white rounded-lg py-3 px-4">
       <div className={`text-sm sm:text-sm lg:text-lg font-bold flex items-center`}>
         {props.name.length>0 && <span className="flex items-center">
           <img
