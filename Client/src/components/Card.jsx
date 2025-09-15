@@ -3,13 +3,12 @@ const C_LOGO = import.meta.env.VITE_C_LOGO;
 
 const Card = (props) => {
   const [analytics, setAnalytics] = useState({});
-  console.log("from cards",props)
   return (
     <div className="border border-white rounded-xl py-2 px-4">
-      <div className={`text-sm sm:text-sm lg:text-lg font-bold flex `}>
-        {props.name.length>0 && <span className="flex">
+      <div className={`text-sm sm:text-sm lg:text-lg font-bold flex items-center`}>
+        {props.name.length>0 && <span className="flex items-center">
           <img
-            className="w-3 h-3 sm:w-6 sm:h-6 object-contain mr-1"
+            className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 object-contain mr-1"
             src={`https://img.logokit.com/crypto/${props.name}?token=${C_LOGO}`}
             alt={`${props.name} logo`}
           />

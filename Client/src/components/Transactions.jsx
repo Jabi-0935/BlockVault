@@ -67,7 +67,7 @@ const Transactions = () => {
                     <div className="h-4 w-24 bg-gray-700 rounded animate-pulse mx-auto"></div>
                   </td>
                   <td>
-                    <div className="h-4 w-24 bg-gray-700 rounded animate-pulse mx-auto"></div>
+                    <div className="h-4 w-6 bg-gray-700 rounded animate-pulse mx-auto"></div>
                   </td>
                 </tr>
               ))}
