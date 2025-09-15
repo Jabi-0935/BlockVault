@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import Card from "../components/card.jsx";
+import Card from "../components/Card.jsx";
 import Transactions from "../components/Transactions";
 
 const apiUrl = import.meta.env.VITE_API_URL;
