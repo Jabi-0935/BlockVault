@@ -122,7 +122,6 @@ const deleteCrypto = async (req, res) => {
     }
     res.json({
       message: "Crypto Transaction Details Deleted",
-      transaction: crypto,
     });
   } catch (err) {
     console.error(err);

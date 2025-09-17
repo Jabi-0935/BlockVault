@@ -22,6 +22,19 @@ const Transactions = () => {
     setModal(true);
   };
 
+  const remove = async(id)=>{
+    const url = `${apiUrl}/portfolio/${id}`;
+    const res = await fetch(url,{
+      method:"DELETE",
+      headers:{
+        "Content-Type":"application/json",
+        Authorization:`Bearer ${token}`
+      }
+    });
+    const result = await res.json();
+    fetch_assets();
+  }
+
   const fetch_assets = async () => {
     setLoading(true);
     try {
@@ -121,7 +134,7 @@ const Transactions = () => {
                         edit
                       </button>
                       <button
-                        onClick={() => delete tx.id}
+                        onClick={() => remove(tx._id)}
                         className="border border-white rounded-xl px-2 py-1"
                       >
                         Delete
