@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { ImGift } from "react-icons/im";
 import { useParams } from "react-router-dom";
+import New_Asset from "../components/New_Asset";
 const apiUrl = import.meta.env.VITE_API_URL;
 const C_LOGO = import.meta.env.VITE_C_LOGO;
 
@@ -10,6 +11,19 @@ const Transactions = () => {
   const { token } = useAuth();
   const [Assets, setAssets] = useState({});
   const [Loading, setLoading] = useState(true);
+  const [isModalOpen,setModal] =useState(false);
+  
+  const update =async (id)=>{
+    const url = `${apiUrl}/transaction/${id}`;
+    const res = await fetch(url,{
+      headers:{
+        "Content-Type":"application/json",
+        Authorization:`Bearer ${token}`
+      }
+    })
+    const result = await res.json();
+    console.log(result);
+  }
 
   const fetch_assets = async () => {
     setLoading(true);
@@ -36,10 +50,10 @@ const Transactions = () => {
 
   return (
     <>
-      <div className="">
+      <div className="box-border m-4">
         {Loading ? (
           // Skeleton table
-          <table className="w-full my-3 text-sm sm:text-lg font-extralight text-center">
+          <table className="w-full text-sm sm:text-lg font-extralight text-center">
             <thead className="text-xs sm:text-sm">
               <tr>
                 <th>#</th>
@@ -47,7 +61,7 @@ const Transactions = () => {
                 <th>Amount</th>
                 <th>Buy Price</th>
                 <th>Date</th>
-                <th></th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -76,52 +90,68 @@ const Transactions = () => {
             </tbody>
           </table>
         ) : (
-          <table className="w-full my-3 text-sm sm:text-lg font-extralight text-center">
+          <table className="w-full text-sm sm:text-lg font-extralight text-center">
             <thead className="text-xs sm:text-sm">
               <tr>
-                <th className="p-1">#</th>
-                <th>Coin</th>
-                <th>Amount</th>
-                <th>Buy Price</th>
-                <th>Date</th>
-                <th></th>
+                <th className="py-1">#</th>
+                <th className="text-end">Coin</th>
+                <th className="text-end">Amount</th>
+                <th className="text-end">Buy Price</th>
+                <th className="text-end">Date</th>
+                <th className="text-center">Actions</th>
               </tr>
             </thead>
             <tbody className="text-sm sm:text-base">
               {Assets.transactions && Assets.transactions.length > 0 ? (
                 Assets.transactions.map((tx, idx) => (
                   <tr key={idx}>
-                    <td className="p-2">{idx + 1}</td>
-                    <td>
+                    <td className="py-2">{idx + 1}</td>
+                    <td className="flex justify-end">
                       <div className="flex items-center justify-center min-h-[24px] leading-none">
                         <img
                           className="w-3 h-3 sm:w-6 sm:h-6 object-contain mr-2"
                           src={`https://img.logokit.com/crypto/${tx.cryptoname}?token=${C_LOGO}`}
                           alt={`${tx.cryptoname} logo`}
                         />
-                        <span className="">
-                          {tx.cryptoname}
-                        </span>
+                        <span className="">{tx.cryptoname}</span>
                       </div>
                     </td>
-                    <td className="">{tx.amt}</td>
-                    <td className="">$ {tx.buyprice}</td>
-                    <td className="">
+                    <td className="text-end">{tx.amt}</td>
+                    <td className="text-end">$ {tx.buyprice}</td>
+                    <td className="text-end">
                       {new Date(tx.date).toLocaleDateString()}
                     </td>
-                    <td><button>edit</button></td>
+                    <td className="">
+                      <button onClick={()=>{setModal(true);update(tx.id)}} className="border mx-1 border-white rounded-xl px-2 py-1">
+                        edit
+                      </button>
+                      <button onClick={()=>delete(tx.id)} className="border border-white rounded-xl px-2 py-1">
+                        Delete
+                      </button>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td className="h-6" colSpan={5}>
-                    No Assets
+                    No Transactions
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
         )}
+        {isModalOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+              <div
+                className="absolute inset-0 bg-black/50 backdrop-blur-xs"
+                onClick={() => setModal(false)}
+              />
+              <div className="relative bg-gray-800 rounded-xl p-4 w-[90%] sm:w-[350px]">
+                <New_Asset />
+              </div>
+            </div>
+          )}
       </div>
     </>
   );

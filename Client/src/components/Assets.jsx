@@ -28,12 +28,12 @@ const Assets = () => {
           <table className="w-full my-3 text-sm sm:text-lg font-extralight text-center">
             <thead className="text-xs sm:text-sm">
               <tr>
-                <th>#</th>
-                <th>Coin</th>
-                <th>Price</th>
-                <th>Amount</th>
-                <th>Avg Price</th>
-                <th></th>
+                <th className="text-end">#</th>
+                <th className="text-end">Coin</th>
+                <th className="text-end">Price</th>
+                <th className="text-end">Amount</th>
+                <th className="text-end">Avg Price</th>
+                <th className="text-end">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -66,11 +66,11 @@ const Assets = () => {
             <thead className="text-xs sm:text-sm">
               <tr>
                 <th className="p-1">#</th>
-                <th>Coin</th>
-                <th>Price</th>
-                <th>Amount</th>
-                <th>Avg Price</th>
-                <th></th>
+                <th className="text-end">Coin</th>
+                <th className="text-end">Price</th>
+                <th className="text-end">Amount</th>
+                <th className="text-end">Avg Price</th>
+                <th className="text-end">Actions</th>
               </tr>
             </thead>
             <tbody className="text-sm sm:text-base">
@@ -78,7 +78,7 @@ const Assets = () => {
                 assets.per_asset.map((tx, idx) => (
                   <tr key={idx}>
                     <td className="p-2">{idx + 1}</td>
-                    <td>
+                    <td className="flex justify-end">
                       <div className="flex items-center justify-center min-h-[24px] leading-none">
                         <img
                           className="w-3 h-3 sm:w-6 sm:h-6 object-contain mr-2"
@@ -88,10 +88,10 @@ const Assets = () => {
                         <span className="">{tx.cryptoName}</span>
                       </div>
                     </td>
-                    <td className="">{formatPrice(tx.currPrice)}</td>
-                    <td className="">{tx.totalAmt}</td>
-                    <td className="">{formatPrice(tx.avgBuyPrice)}</td>
-                    <td>
+                    <td className="text-end">{formatPrice(tx.currPrice)}</td>
+                    <td className="text-end">{tx.totalAmt}</td>
+                    <td className="text-end">{formatPrice(tx.avgBuyPrice)}</td>
+                    <td className="flex justify-end">
                       <button onClick={()=>transaction(tx.cryptoName)}>edit</button>
                     </td>
                   </tr>

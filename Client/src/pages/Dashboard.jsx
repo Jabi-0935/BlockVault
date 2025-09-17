@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import Card from "../components/Card.jsx";
 import { useDash } from "../context/DashContext.jsx";
 import Assets from "../components/Assets.jsx";
+import New_Asset from "../components/New_Asset.jsx";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const Dashboard = () => {
-  const {assets,Loading} = useDash();
+  const { assets, Loading } = useDash();
   const { user, token } = useAuth();
-  
+  const [isModalOpen, setModal] = useState(false);
+
   return (
     <>
       <div className="mx-4 my-2 ">
@@ -29,9 +31,7 @@ const Dashboard = () => {
             title={`Top Gainer`}
             name={`${assets.gainer.name}`}
             value={`${
-              assets.gainer.pnl
-                ? parseFloat(assets.gainer.pnl).toFixed(2)
-                : 0.0
+              assets.gainer.pnl ? parseFloat(assets.gainer.pnl).toFixed(2) : 0.0
             }`}
             color={true}
           />
@@ -47,11 +47,26 @@ const Dashboard = () => {
         <div className="graphs"></div>
         <div className="assets mt-4 border-t p-2 border-white">
           <div className="flex justify-between m-4">
-          <h1 className="text-xl font-bold">Assets</h1>
-          <button className="text-xs lg:text-sm px-2 lg:px-2 py-1 border border-gray-600 rounded-xl hover:bg-gray-700 transition">
-            Add</button>
+            <h1 className="text-xl font-bold">Assets</h1>
+            <button
+              className="text-xs lg:text-sm px-2 lg:px-2 py-1 border border-gray-600 rounded-xl hover:bg-gray-700 transition"
+              onClick={() => setModal(true)}
+            >
+              Add
+            </button>
           </div>
-          <Assets/>
+          <Assets />
+          {isModalOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center">
+              <div
+                className="absolute inset-0 bg-black/50 backdrop-blur-xs"
+                onClick={() => setModal(false)}
+              />
+              <div className="relative bg-gray-800 rounded-xl p-4 w-[90%] sm:w-[350px]">
+                <New_Asset />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>
