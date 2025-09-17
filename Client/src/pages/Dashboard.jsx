@@ -10,6 +10,18 @@ const Dashboard = () => {
   const { assets, Loading } = useDash();
   const { user, token } = useAuth();
   const [isModalOpen, setModal] = useState(false);
+  const [form, setFrom] = useState();
+  const add = async () => {
+    setFrom(
+      <New_Asset
+        onClose={() => setModal(false)}
+        onSuccess={() => {
+          setModal(false);
+        }}
+      />
+    );
+    setModal(true);
+  };
 
   return (
     <>
@@ -50,7 +62,7 @@ const Dashboard = () => {
             <h1 className="text-xl font-bold">Assets</h1>
             <button
               className="text-xs lg:text-sm px-2 lg:px-2 py-1 border border-gray-600 rounded-xl hover:bg-gray-700 transition"
-              onClick={() => setModal(true)}
+              onClick={() => add()}
             >
               Add
             </button>
@@ -63,7 +75,7 @@ const Dashboard = () => {
                 onClick={() => setModal(false)}
               />
               <div className="relative bg-gray-800 rounded-xl p-4 w-[90%] sm:w-[350px]">
-                <New_Asset />
+                {form}
               </div>
             </div>
           )}
