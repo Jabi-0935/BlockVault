@@ -76,7 +76,7 @@ const Assets = () => {
                 assets.per_asset.map((tx, idx) => (
                   <tr key={idx}>
                     <td className="p-2">{idx + 1}</td>
-                    <td className="flex justify-end">
+                    <td className="p-2 flex items-center justify-end">
                       <div className="flex items-center justify-center min-h-[24px] leading-none">
                         <img
                           className="w-3 h-3 sm:w-6 sm:h-6 object-contain mr-2"
