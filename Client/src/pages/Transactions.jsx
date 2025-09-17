@@ -12,16 +12,14 @@ const Transactions = () => {
   const [Assets, setAssets] = useState({});
   const [Loading, setLoading] = useState(true);
   const [isModalOpen, setModal] = useState(false);
+  const [form,setFrom] = useState();
 
-  const update = async (id) => {
-    const url = `${apiUrl}/transaction/${id}`;
-    const res = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const result = await res.json();
+  const update = async (id,coin,amount,price) => {
+    setFrom(<New_Asset add={false} id={id} coin={coin} amount={amount} price={price} onClose={()=>setModal(false)} onSuccess={() => {
+        fetch_assets();
+        setModal(false); 
+      }}/>)
+    setModal(true);
   };
 
   const fetch_assets = async () => {
@@ -55,7 +53,7 @@ const Transactions = () => {
           src={`https://img.logokit.com/crypto/${params.id}?token=${C_LOGO}`}
           alt={`${params.id} logo`}
         />
-        <span className="">{params.id}</span>
+        <span className="text-2xl font-bold">{params.id}</span>
       </div>
       <div className="box-border m-4">
         {Loading ? (
@@ -116,8 +114,7 @@ const Transactions = () => {
                     <td className="">
                       <button
                         onClick={() => {
-                          setModal(true);
-                          update(tx.id);
+                          update(tx._id,tx.cryptoname,tx.amt,tx.buyprice);
                         }}
                         className="border mx-1 border-white rounded-xl px-2 py-1"
                       >
@@ -149,7 +146,7 @@ const Transactions = () => {
               onClick={() => setModal(false)}
             />
             <div className="relative bg-gray-800 rounded-xl p-4 w-[90%] sm:w-[350px]">
-              <New_Asset />
+              {form}
             </div>
           </div>
         )}
