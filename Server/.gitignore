@@ -3,7 +3,7 @@
 
 # Environment variables
 .env
-todo
+todo.txt
 
 # Logs
 npm-debug.log*

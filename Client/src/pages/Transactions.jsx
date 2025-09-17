@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { ImGift } from "react-icons/im";
+import { useParams } from "react-router-dom";
 const apiUrl = import.meta.env.VITE_API_URL;
 const C_LOGO = import.meta.env.VITE_C_LOGO;
 
 const Transactions = () => {
+  const params = useParams();
   const { token } = useAuth();
   const [Assets, setAssets] = useState({});
   const [Loading, setLoading] = useState(true);
@@ -12,7 +14,7 @@ const Transactions = () => {
   const fetch_assets = async () => {
     setLoading(true);
     try {
-      const url = `${apiUrl}/transaction`;
+      const url = `${apiUrl}/transaction/${params.id}`;
       const res = await fetch(url, {
         headers: {
           "Content-Type": "application/json",

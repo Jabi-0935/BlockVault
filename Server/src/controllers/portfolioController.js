@@ -66,7 +66,10 @@ const fetchPortfolioData = async (user_id) => {
 const getTransacations = async (req, res) => {
   try {
     const user_id = mongoose.Types.ObjectId.createFromHexString(req.user.id);
-    const assets = await Asset.find({ userid: user_id });
+    const cryptoname = req.params.id;
+    console.log(cryptoname)
+    const assets = await Asset.find({ userid: user_id,cryptoname:cryptoname });
+    console.log(assets)
     res.json({ transactions: assets });
   } catch (err) {
     console.error("Error fetching transactions:", err);

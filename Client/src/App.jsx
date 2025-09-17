@@ -5,31 +5,44 @@ import Auth from "./pages/Auth";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import Transactions from "./pages/Transactions";
+import { AssetProvider } from "./context/DashContext";
 
 function Layout() {
   return (
     <>
       <NavBar />
-      <Outlet /> 
+      <Outlet />
     </>
   );
 }
 
 const router = createBrowserRouter([
   {
-    element: <Layout />, 
+    element: <Layout />,
     children: [
       { path: "/", element: <Hero /> },
       { path: "/auth", element: <Auth /> },
-      {path:'/dashboard', 
-      element:
-      <ProtectedRoute>
-      <Dashboard/>
-      </ProtectedRoute>
+      {
+        path: "/dashboard",
+        element: (
+          <ProtectedRoute>
+            <AssetProvider>
+              <Dashboard />
+            </AssetProvider>
+          </ProtectedRoute>
+        ),
       },
-    ]
-  }
+      {
+        path: "/transaction/:id",
+        element: (
+          <ProtectedRoute>
+            <Transactions />
+          </ProtectedRoute>
+        ),
+      },
+    ],
+  },
 ]);
 
 function App() {

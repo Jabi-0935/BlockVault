@@ -8,6 +8,6 @@ Router.post('/portfolio',authMiddleware,addCrypto)
 Router.get('/portfolio',authMiddleware,getPortfolio)
 Router.put('/portfolio/:id',authMiddleware,updateCrypto);
 Router.delete('/portfolio/:id',authMiddleware,deleteCrypto);
-Router.get('/transaction',authMiddleware,getTransacations)
+Router.get('/transaction/:id',authMiddleware,getTransacations)
 
 module.exports = Router;

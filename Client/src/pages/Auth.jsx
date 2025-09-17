@@ -42,7 +42,7 @@ const Auth = () => {
       });
 
       const result = await res.json();
-      console.log(result);
+
       if (!res.ok) {
         setMessage(
           <span className="text-red-500 text-xs">*{result.error}</span>
