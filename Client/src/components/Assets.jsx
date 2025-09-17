@@ -16,7 +16,7 @@ const Assets = () => {
 
   const transaction =(cryptoName)=>{
     console.log(cryptoName);
-    
+
     navigate(`/transaction/${cryptoName}`);
   }
 
@@ -88,7 +88,7 @@ const Assets = () => {
                         <span className="">{tx.cryptoName}</span>
                       </div>
                     </td>
-                    <td className="">{tx.currPrice}</td>
+                    <td className="">{formatPrice(tx.currPrice)}</td>
                     <td className="">{tx.totalAmt}</td>
                     <td className="">{formatPrice(tx.avgBuyPrice)}</td>
                     <td>
