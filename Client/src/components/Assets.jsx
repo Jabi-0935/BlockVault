@@ -15,8 +15,6 @@ const Assets = () => {
   };
 
   const transaction =(cryptoName)=>{
-    console.log(cryptoName);
-
     navigate(`/transaction/${cryptoName}`);
   }
 
