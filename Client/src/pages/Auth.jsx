@@ -65,7 +65,7 @@ const Auth = () => {
   };
   return (
     <>
-      <div className="p-3 sm:p-5 w-full border-b border-gray-300 min-h-[80vh] flex flex-col flex-grow items-center justify-center text-center bg-[#0d1216] text-white">
+      <div className="p-3 sm:p-5 w-full min-h-[80vh] flex flex-col flex-grow items-center justify-center text-center bg-[#0d1216] text-white">
         <div className="h-auto min-h-[450px] w-[350px] sm:w-[400px] md:w-[450px] p-3 sm:p-5 border border-gray-300 rounded-2xl flex flex-col items-center justify-start bg-gray-800">
           {/* {This is toogler between login and signup} */}
           <Toogle isLogin={isLogin} setLogin={setLogin} />

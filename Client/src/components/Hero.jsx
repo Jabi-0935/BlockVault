@@ -9,7 +9,7 @@ const Hero = () => {
 
   return (
     <>
-      <div className=" p-5 w-full border-b border-gray-300 min-h-[80vh] flex flex-col flex-grow items-center justify-center text-center">
+      <div className=" p-5 w-full min-h-[80vh] flex flex-col flex-grow items-center justify-center text-center">
         <h1 className="text-3xl md:text-5xl font-bold">
           {isAuthenticated?`Welcome Back, ${user.name.toUpperCase()}!`:`Track Your Crypto Portfolio with Ease`}
         </h1>

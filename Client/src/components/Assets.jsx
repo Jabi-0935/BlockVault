@@ -8,6 +8,7 @@ const C_LOGO = import.meta.env.VITE_C_LOGO;
 const Assets = () => {
   const navigate = useNavigate();
   const { assets, Loading } = useDash();
+  console.log(assets)
   const { token } = useAuth();
   const formatPrice = (price) => {
     let formatted = price < 1 ? price.toFixed(10) : price.toFixed(2);

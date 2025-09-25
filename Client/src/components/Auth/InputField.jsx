@@ -4,9 +4,10 @@ const InputField = (props) => {
   return (
     <>
       <div className="flex flex-col">
-        <div className="flex">
+        <div className="flex justify-between">
           <span className="text-xs h-4">{props.placeholder}</span>
           <span className="text-red-400 text-xs h-4">
+            {props.errors[props.name]?.message && "*"}
             {props.errors[props.name]?.message || ""}
           </span>
         </div>
