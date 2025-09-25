@@ -3,39 +3,57 @@ import { useAuth } from "../context/AuthContext";
 import { ImGift } from "react-icons/im";
 import { useParams } from "react-router-dom";
 import New_Asset from "../components/New_Asset";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ConfirmModal from "../components/Confirm";
+import { AssetProvider, useDash } from "../context/DashContext";
 const apiUrl = import.meta.env.VITE_API_URL;
 const C_LOGO = import.meta.env.VITE_C_LOGO;
 
 const Transactions = () => {
   const params = useParams();
   const { token } = useAuth();
-  const [Assets, setAssets] = useState({});
+  let { assets } = useDash();
+  assets = assets.per_asset.find((asset) => asset.cryptoName === params.id);
+  console.log(assets);
+  const [Transactions, setTransactions] = useState({});
   const [Loading, setLoading] = useState(true);
   const [isModalOpen, setModal] = useState(false);
-  const [form,setFrom] = useState();
+  const [form, setFrom] = useState();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [toDeleteId, setToDeleteId] = useState(null);
 
-  const update = async (id,coin,amount,price) => {
-    setFrom(<New_Asset add={false} id={id} coin={coin} amount={amount} price={price} onClose={()=>setModal(false)} onSuccess={() => {
-        fetch_assets();
-        setModal(false); 
-      }}/>)
+  const update = async (id, coin, amount, price) => {
+    setFrom(
+      <New_Asset
+        add={false}
+        id={id}
+        coin={coin}
+        amount={amount}
+        price={price}
+        onClose={() => setModal(false)}
+        onSuccess={() => {
+          fetch_transacs();
+          setModal(false);
+        }}
+      />
+    );
     setModal(true);
   };
 
-  const remove = async(id)=>{
+  const remove = async (id) => {
     const url = `${apiUrl}/portfolio/${id}`;
-    const res = await fetch(url,{
-      method:"DELETE",
-      headers:{
-        "Content-Type":"application/json",
-        Authorization:`Bearer ${token}`
-      }
+    const res = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
     const result = await res.json();
-    fetch_assets();
-  }
+    fetch_transacs();
+  };
 
-  const fetch_assets = async () => {
+  const fetch_transacs = async () => {
     setLoading(true);
     try {
       const url = `${apiUrl}/transaction/${params.id}`;
@@ -46,7 +64,7 @@ const Transactions = () => {
         },
       });
       const result = await res.json();
-      setAssets(result);
+      setTransactions(result);
     } catch (err) {
       console.error(err);
     } finally {
@@ -54,20 +72,79 @@ const Transactions = () => {
     }
   };
 
+  const handleRemoveClick = (id) => {
+    setToDeleteId(id);
+    setConfirmOpen(true);
+  };
+
+  const confirmRemove = () => {
+    remove(toDeleteId);
+    setConfirmOpen(false);
+    setToDeleteId(null);
+  };
+
+  const cancelRemove = () => {
+    setConfirmOpen(false);
+    setToDeleteId(null);
+  };
+  const formatPrice = (price) => {
+    let formatted = price < 1 ? price.toFixed(10) : price.toFixed(2);
+    return formatted.replace(/\.?0+$/, "");
+  };
+
   useEffect(() => {
-    fetch_assets();
+    fetch_transacs();
   }, []);
 
   return (
     <>
-      <div className="flex p-4 items-center">
-        <img
-          className="w-6 h-6 sm:w-12 sm:h-12 object-contain mr-2"
-          src={`https://img.logokit.com/crypto/${params.id}?token=${C_LOGO}`}
-          alt={`${params.id} logo`}
+      {confirmOpen && (
+        <ConfirmModal
+          message="Are you sure you want to delete this Transaction?"
+          onConfirm={confirmRemove}
+          onCancel={cancelRemove}
         />
-        <span className="text-2xl font-bold">{params.id}</span>
-      </div>
+      )}
+
+      {!assets ? (
+        <div className="">
+          <div className="flex p-4 items-center">
+            <img
+              className="w-3 h-3 sm:w-6 sm:h-6 object-contain mr-2"
+              src={`https://img.logokit.com/crypto/${params.id}?token=${C_LOGO}`}
+              alt={`${params.id} logo`}
+            />
+            <span className="text-2xl font-bold">{params.id}</span>
+          </div>
+          <div className="">0</div>
+        </div>
+      ) : (
+        <div className="p-4">
+          <div className="flex items-center">
+            <img
+              className="w-3 h-3 sm:w-6 sm:h-6 object-contain mr-2"
+              src={`https://img.logokit.com/crypto/${params.id}?token=${C_LOGO}`}
+              alt={`${params.id} logo`}
+            />
+            <span className="text-xl font-bold">{params.id}</span>
+          </div>
+          <div className="mt-2  flex gap-4">
+            <span className="font-extrabold text-2lg">
+              $ {formatPrice(assets.currPrice)}
+            </span>
+            <span
+              className={`font-bold text-2lg ${
+                (assets.per_return * 100).toFixed(2) > 0
+                  ? "text-green-400"
+                  : "text-red-500"
+              }`}
+            >
+              {(assets.per_return * 100).toFixed(2)}%
+            </span>
+          </div>
+        </div>
+      )}
+
       <div className="box-border m-4">
         {Loading ? (
           // Skeleton table
@@ -115,8 +192,9 @@ const Transactions = () => {
               </tr>
             </thead>
             <tbody className="text-sm sm:text-base">
-              {Assets.transactions && Assets.transactions.length > 0 ? (
-                Assets.transactions.map((tx, idx) => (
+              {Transactions.transactions &&
+              Transactions.transactions.length > 0 ? (
+                Transactions.transactions.map((tx, idx) => (
                   <tr key={idx}>
                     <td className="py-2">{idx + 1}</td>
                     <td className="text-end">{tx.amt}</td>
@@ -127,17 +205,17 @@ const Transactions = () => {
                     <td className="">
                       <button
                         onClick={() => {
-                          update(tx._id,tx.cryptoname,tx.amt,tx.buyprice);
+                          update(tx._id, tx.cryptoname, tx.amt, tx.buyprice);
                         }}
                         className="border mx-1 border-white rounded-xl px-2 py-1"
                       >
-                        edit
+                        <FontAwesomeIcon icon="fa-solid fa-pen" widthAuto />
                       </button>
                       <button
-                        onClick={() => remove(tx._id)}
+                        onClick={() => handleRemoveClick(tx._id)}
                         className="border border-white rounded-xl px-2 py-1"
                       >
-                        Delete
+                        <FontAwesomeIcon icon="fa-solid fa-trash" widthAuto />
                       </button>
                     </td>
                   </tr>

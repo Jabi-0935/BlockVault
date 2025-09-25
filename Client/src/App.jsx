@@ -43,7 +43,9 @@ const router = createBrowserRouter([
         path: "/transaction/:id",
         element: (
           <ProtectedRoute>
-            <Transactions />
+            <AssetProvider>
+              <Transactions />
+            </AssetProvider>
           </ProtectedRoute>
         ),
       },

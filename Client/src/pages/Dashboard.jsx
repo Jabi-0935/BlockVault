@@ -20,12 +20,13 @@ const Dashboard = () => {
   const { user, token } = useAuth();
   const [isModalOpen, setModal] = useState(false);
   const [graphs, setgraphs] = useState(() => {
-    return window.innerWidth >= 1280; // xl breakpoint is 1280px
+    return window.innerWidth >= 1280;
   });
   const [form, setFrom] = useState();
-  const add = async () => {
+  const add = async (coin = "") => {
     setFrom(
       <New_Asset
+        coin={coin}
         onClose={() => setModal(false)}
         onSuccess={() => {
           setModal(false);
@@ -126,7 +127,10 @@ const Dashboard = () => {
               Add
             </button>
           </div>
-          <Assets />
+
+          {/* Assets */}
+          <Assets add={add} />
+
           {isModalOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center">
               <div

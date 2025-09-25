@@ -2,22 +2,30 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useDash } from "../context/DashContext";
 import { Link, Links, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+
+library.add(fas, far, fab);
+
 const apiUrl = import.meta.env.VITE_API_URL;
 const C_LOGO = import.meta.env.VITE_C_LOGO;
 
-const Assets = () => {
+const Assets = ({add}) => {
   const navigate = useNavigate();
   const { assets, Loading } = useDash();
-  console.log(assets)
   const { token } = useAuth();
+  const [isModalOpen, setModal] = useState(false);
   const formatPrice = (price) => {
     let formatted = price < 1 ? price.toFixed(10) : price.toFixed(2);
     return formatted.replace(/\.?0+$/, "");
   };
 
-  const transaction =(cryptoName)=>{
+  const transaction = (cryptoName) => {
     navigate(`/transaction/${cryptoName}`);
-  }
+  };
 
   return (
     <>
@@ -90,8 +98,13 @@ const Assets = () => {
                     <td className="text-end">{formatPrice(tx.currPrice)}</td>
                     <td className="text-end">{tx.totalAmt}</td>
                     <td className="text-end">{formatPrice(tx.avgBuyPrice)}</td>
-                    <td className="flex justify-end">
-                      <button onClick={()=>transaction(tx.cryptoName)}>edit</button>
+                    <td className="text-end">
+                      <button onClick={()=>add(tx.cryptoName)}>
+                        <FontAwesomeIcon icon="fa-solid fa-plus" />
+                      </button>
+                      <button onClick={() => transaction(tx.cryptoName)}>
+                        <FontAwesomeIcon icon="fa-solid fa-ellipsis-vertical" />
+                      </button>
                     </td>
                   </tr>
                 ))
