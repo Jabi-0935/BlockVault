@@ -7,12 +7,18 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Transactions from "./pages/Transactions";
 import { AssetProvider } from "./context/DashContext";
+import Footer from "./components/Footer";
 
 function Layout() {
   return (
     <>
-      <NavBar />
-      <Outlet />
+      <div className="flex flex-col min-h-screen">
+        <NavBar />
+        <main className="flex-1">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }

@@ -4,10 +4,13 @@ import Card from "../components/Card.jsx";
 import { useDash } from "../context/DashContext.jsx";
 import Assets from "../components/Assets.jsx";
 import New_Asset from "../components/New_Asset.jsx";
+import PieChart from "../components/PieChart.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const Dashboard = () => {
   const { assets, Loading } = useDash();
+  console.log(assets)
   const { user, token } = useAuth();
   const [isModalOpen, setModal] = useState(false);
   const [form, setFrom] = useState();
@@ -26,8 +29,11 @@ const Dashboard = () => {
   return (
     <>
       <div className="mx-4 my-2 ">
-        <h1 className="text-center text-2xl font-bold mb-2">Your Dashboard</h1>
-        <div className="card grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4">
+        <div className="">
+          <h1 className="text-2xl font-bold mb-2">Your Dashboard</h1>
+          
+        </div>
+        <div className="card grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-2">
           <Card
             title="Current Balance"
             name=""
@@ -56,7 +62,14 @@ const Dashboard = () => {
             color={true}
           />
         </div>
-        <div className="graphs"></div>
+
+        {/* Visual Representations */}
+        <div className="graphs flex gap-2">
+          <PieChart type="pie" />
+          <PieChart />
+        </div>
+
+        {/* List of assets */}
         <div className="assets mt-4 border-t p-2 border-white">
           <div className="flex justify-between m-4">
             <h1 className="text-xl font-bold">Assets</h1>

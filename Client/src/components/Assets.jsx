@@ -10,7 +10,7 @@ const Assets = () => {
   const { assets, Loading } = useDash();
   const { token } = useAuth();
   const formatPrice = (price) => {
-    let formatted = price < 1 ? price.toFixed(6) : price.toFixed(2);
+    let formatted = price < 1 ? price.toFixed(10) : price.toFixed(2);
     return formatted.replace(/\.?0+$/, "");
   };
 
@@ -64,7 +64,7 @@ const Assets = () => {
             <thead className="text-xs sm:text-sm">
               <tr>
                 <th className="p-1">#</th>
-                <th className="text-end">Coin</th>
+                <th className="text-end pr-2">Coin</th>
                 <th className="text-end">Price</th>
                 <th className="text-end">Amount</th>
                 <th className="text-end">Avg Price</th>

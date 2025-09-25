@@ -20,7 +20,7 @@ const getPrice = async (ticker) => {
     },
   },)
   let jdata = await rawdata.json();
-  let currPrice = {price:parseFloat(jdata['data'][`${ticker}`].quote.USD.price).toFixed(4),timestamp:Date.now()};
+  let currPrice = {price:parseFloat(jdata['data'][`${ticker}`].quote.USD.price),timestamp:Date.now()};
   cache[ticker] = currPrice;
   return cache[ticker].price
 };

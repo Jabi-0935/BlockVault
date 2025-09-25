@@ -27,7 +27,6 @@ export const AssetProvider = ({ children }) => {
     setLoading(true);
     try {
       const url = `${apiUrl}/analytics`;
-      // console.log(url)
       const res = await fetch(url, {
         method: "GET",
         headers: {

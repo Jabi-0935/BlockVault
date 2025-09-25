@@ -34,7 +34,7 @@ const getPortfolioMetrics = async (req, res) => {
       const per_return = (
         (100 * returns) /
         (asset.totalAmt * asset.avgBuyPrice)
-      ).toFixed(4);
+      );
       total_balance+=price*asset.totalAmt;
       total_buy_price+=asset.totalAmt*asset.avgBuyPrice;
       
@@ -51,15 +51,18 @@ const getPortfolioMetrics = async (req, res) => {
         currPrice: price,
         returns: returns,
         per_return: per_return,
+        holding:price*asset.totalAmt,
       };
     });
+    const sortedAssets = updatedAssets.sort((a,b)=>b.holding - a.holding);
+    
 
     res.json({
       gainer:top,
       loser:loss,
       balance:total_balance,
       pnl:total_balance-total_buy_price,
-      per_asset:updatedAssets
+      per_asset:sortedAssets,
     });
   } catch (error) {
     console.error("Error in getPortfolioMetrics:", error);
