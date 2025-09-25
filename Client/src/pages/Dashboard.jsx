@@ -64,7 +64,7 @@ const Dashboard = () => {
         </div>
 
         {/* Visual Representations */}
-        <div className="graphs hidden 2lg:flex 2lg:gap-2 ">
+        <div className="graphs hidden xl:flex xl:gap-2 ">
           <PieChart type="pie" />
           <PieChart />
         </div>
