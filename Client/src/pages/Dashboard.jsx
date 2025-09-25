@@ -5,14 +5,23 @@ import { useDash } from "../context/DashContext.jsx";
 import Assets from "../components/Assets.jsx";
 import New_Asset from "../components/New_Asset.jsx";
 import PieChart from "../components/PieChart.jsx";
+import BarChart from "../components/BarChart.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+
+/* import all the icons in Free Solid, Free Regular, and Brands styles */
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+
+library.add(fas, far, fab);
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const Dashboard = () => {
   const { assets, Loading } = useDash();
-  console.log(assets)
   const { user, token } = useAuth();
   const [isModalOpen, setModal] = useState(false);
+  const [graphs, setgraphs] = useState(true);
   const [form, setFrom] = useState();
   const add = async () => {
     setFrom(
@@ -29,9 +38,17 @@ const Dashboard = () => {
   return (
     <>
       <div className="mx-4 my-2 ">
-        <div className="">
-          <h1 className="text-2xl font-bold mb-2">Your Dashboard</h1>
-          
+        <div className="px-2 flex items-center mb-2 justify-between">
+          <h1 className="text-2xl font-bold">Your Dashboard</h1>
+          <button
+            className={`text-xs lg:text-sm px-2 lg:px-2 py-1 border border-gray-600 rounded-lg hover:bg-gray-700 transition
+              ${graphs ? "bg-gray-600 text-white" : ""}`}
+            onClick={() => {
+              setgraphs(!graphs);
+            }}
+          >
+            <FontAwesomeIcon icon="fa-solid fa-chart-simple" />
+          </button>
         </div>
         <div className="card grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-2">
           <Card
@@ -64,10 +81,40 @@ const Dashboard = () => {
         </div>
 
         {/* Visual Representations */}
-        <div className="graphs hidden xl:flex xl:gap-2 ">
-          <PieChart type="pie" />
-          <PieChart />
-        </div>
+        {graphs && (
+          <>
+            {/* Desktop view - side by side */}
+            <div className="graphs hidden xl:flex xl:gap-2">
+              <PieChart />
+              <BarChart />
+            </div>
+
+            {/* Mobile/Tablet view - fullscreen overlay */}
+            <div className="xl:hidden fixed inset-0 z-50 bg-gray-900 overflow-y-auto">
+              {/* Header with close button */}
+              <div className="flex items-center justify-between p-4 border-b border-gray-700">
+                <h2 className="text-xl font-bold text-white">Analytics</h2>
+                <button
+                  onClick={() => setgraphs(false)}
+                  className="text-white hover:bg-gray-700 p-2 rounded-full transition"
+                >
+                  <FontAwesomeIcon icon="fa-solid fa-times" />
+                </button>
+              </div>
+
+              {/* Charts in fullscreen */}
+              <div className="p-4 space-y-4">
+                <div className="w-full">
+                  <PieChart />
+                </div>
+                <div className="w-full">
+                  <BarChart />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
 
         {/* List of assets */}
         <div className="assets mt-4 border-t p-2 border-white">
