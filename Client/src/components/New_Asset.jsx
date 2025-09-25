@@ -11,7 +11,7 @@ const New_Asset = ({
   price = 1,
   amount = 1,
   onClose,
-  onSuccess
+  onSuccess,
 }) => {
   const { token } = useAuth();
   const [Message, setMessage] = useState("");
@@ -49,59 +49,64 @@ const New_Asset = ({
   };
 
   return (
-    <div className="box-border border border-white rounded-2xl p-4">
-      <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        <InputField
-          type="text"
-          placeholder="Coin"
-          name="coin"
-          value={coin}
-          register={register}
-          errors={errors}
-          disabled={!add}
-          rules={{
-            required: "Coin Required",
-          }}
-        />
-        <InputField
-          type="number"
-          placeholder="Amount"
-          name="amount"
-          value={amount}
-          register={register}
-          errors={errors}
-          rules={{
-            required: "Amount Required",
-            valueAsNumber: true,
-            validate: (value) => {
-              value > 0 || "Amount Must be greater than 0";
-            },
-          }}
-          step="any"
-        />
-        <InputField
-          type="number"
-          placeholder="BuyPrice"
-          name="buyprice"
-          value={price}
-          register={register}
-          errors={errors}
-          rules={{
-            required: "Buy Price Required",
-            valueAsNumber: true,
-            validate: (value) => {
-              value > 0 || "Price Must be greater than 0";
-            },
-          }}
-        />
-        <button type="submit" className="py-1 px-2">
-          Submit
-        </button>
-      </form>
-      <div className="h-4 text-xs mt-1 text-center text-green-400">
-        {Message && Message}
+    <>
+      <div className="box-border border border-white rounded-2xl p-4">
+        <div className="text-center">
+          <h3 className="text-xl font-bold">Add Transaction</h3>
+        </div>
+        <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
+          <InputField
+            type="text"
+            placeholder="Coin"
+            name="coin"
+            value={coin}
+            register={register}
+            errors={errors}
+            disabled={!add}
+            rules={{
+              required: "Coin Required",
+            }}
+          />
+          <InputField
+            type="number"
+            placeholder="BuyPrice"
+            name="buyprice"
+            value={price}
+            register={register}
+            errors={errors}
+            rules={{
+              required: "Buy Price Required",
+              valueAsNumber: true,
+              validate: (value) => {
+                value > 0 || "Price Must be greater than 0";
+              },
+            }}
+          />
+          <InputField
+            type="number"
+            placeholder="Amount"
+            name="amount"
+            value={amount}
+            register={register}
+            errors={errors}
+            rules={{
+              required: "Amount Required",
+              valueAsNumber: true,
+              validate: (value) => {
+                value > 0 || "Amount Must be greater than 0";
+              },
+            }}
+            step="any"
+          />
+          <button type="submit" className="py-1 px-2">
+            Submit
+          </button>
+        </form>
+        <div className="h-4 text-xs mt-1 text-center text-green-400">
+          {Message && Message}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

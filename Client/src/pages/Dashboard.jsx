@@ -21,7 +21,9 @@ const Dashboard = () => {
   const { assets, Loading } = useDash();
   const { user, token } = useAuth();
   const [isModalOpen, setModal] = useState(false);
-  const [graphs, setgraphs] = useState(true);
+  const [graphs, setgraphs] = useState(() => {
+    return window.innerWidth >= 1280; // xl breakpoint is 1280px
+  });
   const [form, setFrom] = useState();
   const add = async () => {
     setFrom(
@@ -114,7 +116,6 @@ const Dashboard = () => {
             </div>
           </>
         )}
-
 
         {/* List of assets */}
         <div className="assets mt-4 border-t p-2 border-white">
