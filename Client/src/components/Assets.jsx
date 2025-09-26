@@ -13,13 +13,14 @@ library.add(fas, far, fab);
 const apiUrl = import.meta.env.VITE_API_URL;
 const C_LOGO = import.meta.env.VITE_C_LOGO;
 
-const Assets = ({add}) => {
+const Assets = ({ add }) => {
   const navigate = useNavigate();
   const { assets, Loading } = useDash();
   const { token } = useAuth();
   const [isModalOpen, setModal] = useState(false);
   const formatPrice = (price) => {
-    let formatted = price < 1 ? price.toFixed(10) : price.toFixed(2);
+    let formatted =
+      price < 1 && price > 0 ? price.toFixed(10) : price.toFixed(2);
     return formatted.replace(/\.?0+$/, "");
   };
 
@@ -37,9 +38,10 @@ const Assets = ({add}) => {
               <tr>
                 <th className="text-end">#</th>
                 <th className="text-end">Coin</th>
-                <th className="text-end">Price</th>
+                <th className="text-end hidden sm:table-cell">Price</th>
                 <th className="text-end">Amount</th>
-                <th className="text-end">Avg Price</th>
+                <th className="hidden sm:table-cell text-end">Avg Price</th>
+                <th className="text-end">PNL</th>
                 <th className="text-end">Actions</th>
               </tr>
             </thead>
@@ -53,10 +55,10 @@ const Assets = ({add}) => {
                     <div className="h-4 w-16 bg-gray-700 rounded animate-pulse mx-auto"></div>
                   </td>
                   <td>
-                    <div className="h-4 w-12 bg-gray-700 rounded animate-pulse mx-auto"></div>
+                    <div className="hidden sm:table-cell h-4 w-12 bg-gray-700 rounded animate-pulse mx-auto"></div>
                   </td>
                   <td>
-                    <div className="h-4 w-20 bg-gray-700 rounded animate-pulse mx-auto"></div>
+                    <div className="hidden sm:table-cell h-4 w-20 bg-gray-700 rounded animate-pulse mx-auto"></div>
                   </td>
                   <td>
                     <div className="h-4 w-24 bg-gray-700 rounded animate-pulse mx-auto"></div>
@@ -74,13 +76,14 @@ const Assets = ({add}) => {
               <tr>
                 <th className="p-1">#</th>
                 <th className="text-end pr-2">Coin</th>
-                <th className="text-end">Price</th>
+                <th className="hidden sm:table-cell text-end">Price</th>
                 <th className="text-end">Amount</th>
-                <th className="text-end">Avg Price</th>
+                <th className="hidden sm:table-cell text-end">Avg Price</th>
+                <th className="text-end">PNL</th>
                 <th className="text-end">Actions</th>
               </tr>
             </thead>
-            <tbody className="text-sm sm:text-base">
+            <tbody className="text-sm font-semibold sm:text-base">
               {assets.per_asset && assets.per_asset.length > 0 ? (
                 assets.per_asset.map((tx, idx) => (
                   <tr key={idx}>
@@ -95,11 +98,17 @@ const Assets = ({add}) => {
                         <span className="">{tx.cryptoName}</span>
                       </div>
                     </td>
-                    <td className="text-end">{formatPrice(tx.currPrice)}</td>
+                    <td className="hidden sm:table-cell text-end">{formatPrice(tx.currPrice)}</td>
                     <td className="text-end">{tx.totalAmt}</td>
-                    <td className="text-end">{formatPrice(tx.avgBuyPrice)}</td>
+                    <td className="hidden sm:table-cell text-end">{formatPrice(tx.avgBuyPrice)}</td>
+                    <td className={`text-end font-bold text-xs ${tx.returns > 0? "text-green-400": "text-red-600"}`}>{tx.returns > 0? `+$${(tx.returns).toFixed(2)}`
+                        : `-$${(
+                            (tx.returns) *
+                            -1
+                          ).toFixed(2)}`}
+                    </td>
                     <td className="text-end">
-                      <button onClick={()=>add(tx.cryptoName)}>
+                      <button onClick={() => add(tx.cryptoName)}>
                         <FontAwesomeIcon icon="fa-solid fa-plus" />
                       </button>
                       <button onClick={() => transaction(tx.cryptoName)}>

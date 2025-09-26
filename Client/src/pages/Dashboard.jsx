@@ -40,7 +40,12 @@ const Dashboard = () => {
     <>
       <div className="mx-4 my-2 ">
         <div className="px-2 flex items-center mb-2 justify-between">
-          <h1 className="text-2xl font-bold">Your Dashboard</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-lg sm:text-2xl font-bold">Portfolio</h1>
+            <span className="text-lg sm:text-2xl text-yellow-300">
+              <FontAwesomeIcon icon="fa-solid fa-chart-simple" />
+            </span>
+          </div>
           <button
             className={`text-xs lg:text-sm px-2 lg:px-2 py-1 border border-gray-600 rounded-lg hover:bg-gray-700 transition
               ${graphs ? "bg-gray-600 text-white" : ""}`}
@@ -48,7 +53,7 @@ const Dashboard = () => {
               setgraphs(!graphs);
             }}
           >
-            <FontAwesomeIcon icon="fa-solid fa-chart-simple" />
+            <FontAwesomeIcon icon="fa-solid fa-chart-pie" />
           </button>
         </div>
         <div className="card grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-2">
@@ -118,13 +123,13 @@ const Dashboard = () => {
 
         {/* List of assets */}
         <div className="assets mt-4 border-t p-2 border-white">
-          <div className="flex justify-between m-4">
+          <div className="flex justify-between ml-4">
             <h1 className="text-xl font-bold">Assets</h1>
             <button
-              className="text-xs lg:text-sm px-2 lg:px-2 py-1 border border-gray-600 rounded-xl hover:bg-gray-700 transition"
+              className="text-xs lg:text-sm px-2 lg:px-2 py-1 border border-gray-600 rounded-lg hover:bg-gray-700 transition"
               onClick={() => add()}
             >
-              Add
+              <FontAwesomeIcon icon="fa-solid fa-plus" /> Coin
             </button>
           </div>
 

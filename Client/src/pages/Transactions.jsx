@@ -6,15 +6,16 @@ import New_Asset from "../components/New_Asset";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ConfirmModal from "../components/Confirm";
 import { AssetProvider, useDash } from "../context/DashContext";
+import Card from "../components/Card";
+
 const apiUrl = import.meta.env.VITE_API_URL;
 const C_LOGO = import.meta.env.VITE_C_LOGO;
 
 const Transactions = () => {
   const params = useParams();
   const { token } = useAuth();
-  let { assets } = useDash();
-  assets = assets.per_asset.find((asset) => asset.cryptoName === params.id);
-  console.log(assets);
+  let { assets, Loading: dashLoading } = useDash();
+  assets = assets?.per_asset.find((asset) => asset.cryptoName === params.id);
   const [Transactions, setTransactions] = useState({});
   const [Loading, setLoading] = useState(true);
   const [isModalOpen, setModal] = useState(false);
@@ -95,6 +96,7 @@ const Transactions = () => {
   useEffect(() => {
     fetch_transacs();
   }, []);
+  console.log(assets);
 
   return (
     <>
@@ -106,7 +108,12 @@ const Transactions = () => {
         />
       )}
 
-      {!assets ? (
+      {dashLoading ? (
+        <div className="flex p-4 items-center">
+          <div className="w-3 h-3 sm:w-6 sm:h-6 bg-gray-700 rounded animate-pulse mr-2"></div>
+          <div className="h-6 w-20 bg-gray-700 rounded animate-pulse"></div>
+        </div>
+      ) : !assets ? (
         <div className="">
           <div className="flex p-4 items-center">
             <img
@@ -119,7 +126,7 @@ const Transactions = () => {
           <div className="">0</div>
         </div>
       ) : (
-        <div className="p-4">
+        <div className="mx-4 py-4 mb  -2 border-b border-white">
           <div className="flex items-center">
             <img
               className="w-3 h-3 sm:w-6 sm:h-6 object-contain mr-2"
@@ -128,25 +135,50 @@ const Transactions = () => {
             />
             <span className="text-xl font-bold">{params.id}</span>
           </div>
-          <div className="mt-2  flex gap-4">
-            <span className="font-extrabold text-2lg">
+          <div className="mt-2 flex items-center gap-4">
+            <span className="font-extrabold text-2xl">
               $ {formatPrice(assets.currPrice)}
             </span>
             <span
-              className={`font-bold text-2lg ${
-                (assets.per_return * 100).toFixed(2) > 0
+              className={`font-bold text-xl ${
+                assets.per_return.toFixed(2) > 0
                   ? "text-green-400"
                   : "text-red-500"
               }`}
             >
-              {(assets.per_return * 100).toFixed(2)}%
+              {assets.per_return.toFixed(2)}%
             </span>
+          </div>
+
+          {/* Cards */}
+          <div className="cards mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 lg:gap-2">
+            <Card
+              title="Holding value"
+              name=""
+              value={assets.holding.toFixed(2)}
+            />
+            <Card title="Holdings" name="" value={assets.totalAmt} />
+            <Card
+              title="Total Cost"
+              name=""
+              value={assets.avgBuyPrice * assets.totalAmt}
+            />
+            <Card title="Average Net Cost" name="" value={assets.avgBuyPrice} />
+            <Card
+              title="Total Profit/Loss"
+              name=""
+              value={assets.returns.toFixed(2)}
+              color={true}
+            />
           </div>
         </div>
       )}
 
-      <div className="box-border m-4">
-        {Loading ? (
+      <div className="px-4">
+        <h1 className="text-base md:text-sm lg:text-xl font-medium py-2">
+          Transactions
+        </h1>
+        {(dashLoading || Loading) ? (
           // Skeleton table
           <table className="w-full text-sm sm:text-lg font-extralight text-center">
             <thead className="text-xs sm:text-sm">
@@ -187,6 +219,8 @@ const Transactions = () => {
                 <th className="py-1">#</th>
                 <th className="text-end">Amount</th>
                 <th className="text-end">Buy Price</th>
+                <th className="text-end">Cost</th>
+                <th className="text-end">PNL</th>
                 <th className="text-end">Date</th>
                 <th className="text-center">Actions</th>
               </tr>
@@ -199,6 +233,24 @@ const Transactions = () => {
                     <td className="py-2">{idx + 1}</td>
                     <td className="text-end">{tx.amt}</td>
                     <td className="text-end">$ {tx.buyprice}</td>
+                    <td className="text-end">{tx.amt * tx.buyprice}</td>
+                    <td
+                      className={`text-end ${
+                        assets.currPrice * tx.amt - tx.amt * tx.buyprice > 0
+                          ? "text-green-400"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {assets.currPrice * tx.amt - tx.amt * tx.buyprice > 0
+                        ? `+$${(
+                            assets.currPrice * tx.amt -
+                            tx.amt * tx.buyprice
+                          ).toFixed(2)}`
+                        : `-$${(
+                            (assets.currPrice * tx.amt - tx.amt * tx.buyprice) *
+                            -1
+                          ).toFixed(2)}`}
+                    </td>
                     <td className="text-end">
                       {new Date(tx.date).toLocaleDateString()}
                     </td>
