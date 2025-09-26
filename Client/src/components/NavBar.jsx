@@ -10,7 +10,7 @@ const NavBar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="text-[rgb(223_229_236)] w-full h-16 border-b border-gray-300 bg-[#0d1216] px-2 sm:px-4 py-2 box-border flex justify-between items-center sticky top-0 z-50">
+    <nav className=" w-full h-16 border-b border-gray-300 bg-[#0d1216] px-2 sm:px-4 py-2 box-border flex justify-between items-center sticky top-0 z-50">
       {/* Logo Section */}
       <div className="logo flex items-center gap-1 sm:gap-2">
         <img src={Logo} alt="BlockVault" className="h-8 sm:h-10 w-auto" />

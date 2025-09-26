@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 const C_LOGO = import.meta.env.VITE_C_LOGO;
 
-const Card = ({ name, color, value, title, pnl }) => {
+const Card = ({ name, color, value, title, pnl,className="" }) => {
   const [analytics, setAnalytics] = useState({});
   return (
-    <div className="border border-white rounded-lg py-3 px-4">
+    <div className={`border border-white rounded-lg py-3 px-4 ${className}`}>
       <div className={`text-sm sm:text-sm lg:text-lg font-bold flex items-center`}>
         {(name || name.length > 0) && (
           <span className="flex items-center">

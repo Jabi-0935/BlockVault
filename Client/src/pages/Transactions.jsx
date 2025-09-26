@@ -136,11 +136,11 @@ const Transactions = () => {
             <span className="text-xl font-bold">{params.id}</span>
           </div>
           <div className="mt-2 flex items-center gap-4">
-            <span className="font-extrabold text-2xl">
+            <span className="font-extrabold text-xl sm:text-2xl">
               $ {formatPrice(assets.currPrice)}
             </span>
             <span
-              className={`font-bold text-xl ${
+              className={`font-bold sm:text-xl ${
                 assets.per_return.toFixed(2) > 0
                   ? "text-green-400"
                   : "text-red-500"
@@ -151,7 +151,7 @@ const Transactions = () => {
           </div>
 
           {/* Cards */}
-          <div className="cards mt-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 lg:gap-2">
+          <div className="cards mt-2 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-2 lg:gap-2">
             <Card
               title="Holding value"
               name=""
@@ -169,6 +169,7 @@ const Transactions = () => {
               name=""
               value={assets.returns.toFixed(2)}
               color={true}
+              className="col-span-2 md:col-span-5 flex flex-row-reverse items-center justify-center gap-2 text-2xl"
             />
           </div>
         </div>
@@ -221,11 +222,11 @@ const Transactions = () => {
                 <th className="text-end">Buy Price</th>
                 <th className="text-end">Cost</th>
                 <th className="text-end">PNL</th>
-                <th className="text-end">Date</th>
+                <th className="hidden sm:table-cell text-end">Date</th>
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
-            <tbody className="text-sm sm:text-base">
+            <tbody className="text-sm font-semibold sm:text-base">
               {Transactions.transactions &&
               Transactions.transactions.length > 0 ? (
                 Transactions.transactions.map((tx, idx) => (
@@ -233,9 +234,9 @@ const Transactions = () => {
                     <td className="py-2">{idx + 1}</td>
                     <td className="text-end">{tx.amt}</td>
                     <td className="text-end">$ {tx.buyprice}</td>
-                    <td className="text-end">{tx.amt * tx.buyprice}</td>
+                    <td className="text-end">${tx.amt * tx.buyprice}</td>
                     <td
-                      className={`text-end ${
+                      className={`text-end font-bold text-xs ${
                         assets.currPrice * tx.amt - tx.amt * tx.buyprice > 0
                           ? "text-green-400"
                           : "text-red-600"
@@ -251,7 +252,7 @@ const Transactions = () => {
                             -1
                           ).toFixed(2)}`}
                     </td>
-                    <td className="text-end">
+                    <td className="hidden sm:table-cell text-end">
                       {new Date(tx.date).toLocaleDateString()}
                     </td>
                     <td className="">
