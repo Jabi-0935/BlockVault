@@ -1,5 +1,5 @@
 const { fetchPortfolioData } = require("./portfolioController");
-const { getPrice } = require("../services/priceService");
+const { getPrice,fetchAllCryptos } = require("../services/cryptoService");
 const mongoose = require("mongoose");
 
 const getPortfolioMetrics = async (req, res) => {
@@ -74,4 +74,14 @@ const overview =async (req,res)=>{
   const updatedAssets = getPortfolioMetrics(req,res);
 }
 
-module.exports = { getPortfolioMetrics };
+const getcryptos = async(req,res)=>{
+  try{
+    const cryptos = await fetchAllCryptos();
+    res.json(cryptos);
+  }catch(error){
+    console.error("Error in getting the cryptos");
+    res.status(500).json({error:"An internal server error occurred." })
+  }
+}
+
+module.exports = { getPortfolioMetrics ,getcryptos};
