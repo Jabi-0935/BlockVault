@@ -30,24 +30,24 @@ const router = createBrowserRouter([
       { path: "/", element: <Hero /> },
       { path: "/auth", element: <Auth /> },
       {
-        path: "/dashboard",
+        path: "/",
         element: (
           <ProtectedRoute>
             <AssetProvider>
-              <Dashboard />
+              <Outlet />
             </AssetProvider>
           </ProtectedRoute>
         ),
-      },
-      {
-        path: "/transaction/:id",
-        element: (
-          <ProtectedRoute>
-            <AssetProvider>
-              <Transactions />
-            </AssetProvider>
-          </ProtectedRoute>
-        ),
+        children: [
+          {
+            path: "dashboard",
+            element: <Dashboard />
+          },
+          {
+            path: "transaction/:id",
+            element: <Transactions />
+          },
+        ],
       },
     ],
   },

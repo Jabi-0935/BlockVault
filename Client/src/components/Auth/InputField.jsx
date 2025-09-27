@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 
 const InputField = (props) => {
+  const { register, name, rules, onChange } = props;
+  const registered = register(name, {
+    ...rules,
+    onChange: (e) => {
+      if (onChange) onChange(e);
+    },
+  });
   return (
     <>
       <div className="flex flex-col">
@@ -20,6 +27,7 @@ const InputField = (props) => {
           defaultValue={props.value || ""}
           disabled={props.disabled || false}
           placeholder={props.placeholder}
+          onChange={props.onChange}
           {...props.register(props.name, props.rules)}
         />
       </div>

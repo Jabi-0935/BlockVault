@@ -36,35 +36,44 @@ const Assets = ({ add }) => {
           <table className="w-full my-3 text-sm sm:text-lg font-extralight text-center">
             <thead className="text-xs sm:text-sm">
               <tr>
-                <th className="text-end">#</th>
-                <th className="text-end">Coin</th>
-                <th className="text-end hidden sm:table-cell">Price</th>
+                <th className="p-1">#</th>
+                <th className="text-end pr-2">Coin</th>
+                <th className="hidden sm:table-cell text-end">Price</th>
                 <th className="text-end">Amount</th>
                 <th className="hidden sm:table-cell text-end">Avg Price</th>
                 <th className="text-end">PNL</th>
                 <th className="text-end">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="text-sm font-semibold sm:text-base">
               {[...Array(5)].map((_, idx) => (
                 <tr key={idx}>
-                  <td className="py-2">
-                    <div className="h-4 w-6 bg-gray-700 rounded animate-pulse mx-auto"></div>
+                  <td className="p-2">
+                    <div className="h-4 w-4 bg-gray-700 rounded animate-pulse"></div>
                   </td>
-                  <td>
-                    <div className="h-4 w-16 bg-gray-700 rounded animate-pulse mx-auto"></div>
+                  <td className="p-2">
+                    <div className="flex items-center justify-end">
+                      <div className="w-3 h-3 sm:w-6 sm:h-6 bg-gray-700 rounded-full animate-pulse mr-2"></div>
+                      <div className="h-4 w-12 bg-gray-700 rounded animate-pulse"></div>
+                    </div>
                   </td>
-                  <td>
-                    <div className="hidden sm:table-cell h-4 w-12 bg-gray-700 rounded animate-pulse mx-auto"></div>
+                  <td className="hidden sm:table-cell text-end">
+                    <div className="h-4 w-16 bg-gray-700 rounded animate-pulse ml-auto"></div>
                   </td>
-                  <td>
-                    <div className="hidden sm:table-cell h-4 w-20 bg-gray-700 rounded animate-pulse mx-auto"></div>
+                  <td className="text-end">
+                    <div className="h-4 w-12 bg-gray-700 rounded animate-pulse ml-auto"></div>
                   </td>
-                  <td>
-                    <div className="h-4 w-24 bg-gray-700 rounded animate-pulse mx-auto"></div>
+                  <td className="hidden sm:table-cell text-end">
+                    <div className="h-4 w-16 bg-gray-700 rounded animate-pulse ml-auto"></div>
                   </td>
-                  <td>
-                    <div className="h-4 w-6 bg-gray-700 rounded animate-pulse mx-auto"></div>
+                  <td className="text-end">
+                    <div className="h-4 w-20 bg-gray-700 rounded animate-pulse ml-auto"></div>
+                  </td>
+                  <td className="text-end">
+                    <div className="flex justify-end gap-2">
+                      <div className="h-4 w-4 bg-gray-700 rounded animate-pulse"></div>
+                      <div className="h-4 w-4 bg-gray-700 rounded animate-pulse"></div>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -98,14 +107,21 @@ const Assets = ({ add }) => {
                         <span className="">{tx.cryptoName}</span>
                       </div>
                     </td>
-                    <td className="hidden sm:table-cell text-end">{formatPrice(tx.currPrice)}</td>
+                    <td className="hidden sm:table-cell text-end">
+                      {formatPrice(tx.currPrice)}
+                    </td>
                     <td className="text-end">{tx.totalAmt}</td>
-                    <td className="hidden sm:table-cell text-end">{formatPrice(tx.avgBuyPrice)}</td>
-                    <td className={`text-end font-bold text-xs ${tx.returns > 0? "text-green-400": "text-red-600"}`}>{tx.returns > 0? `+$${(tx.returns).toFixed(2)}`
-                        : `-$${(
-                            (tx.returns) *
-                            -1
-                          ).toFixed(2)}`}
+                    <td className="hidden sm:table-cell text-end">
+                      {formatPrice(tx.avgBuyPrice)}
+                    </td>
+                    <td
+                      className={`text-end font-bold text-xs ${
+                        tx.returns > 0 ? "text-green-400" : "text-red-600"
+                      }`}
+                    >
+                      {tx.returns > 0
+                        ? `+$${tx.returns.toFixed(2)}`
+                        : `-$${(tx.returns * -1).toFixed(2)}`}
                     </td>
                     <td className="text-end">
                       <button onClick={() => add(tx.cryptoName)}>

@@ -96,7 +96,6 @@ const Transactions = () => {
   useEffect(() => {
     fetch_transacs();
   }, []);
-  console.log(assets);
 
   return (
     <>

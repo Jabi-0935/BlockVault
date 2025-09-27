@@ -16,8 +16,7 @@ library.add(fas, far, fab);
 
 const apiUrl = import.meta.env.VITE_API_URL;
 const Dashboard = () => {
-  const { assets, Loading } = useDash();
-  const { user, token } = useAuth();
+  const { assets, Loading, cryptos } = useDash();
   const [isModalOpen, setModal] = useState(false);
   const [graphs, setgraphs] = useState(() => {
     return window.innerWidth >= 1280;
@@ -56,35 +55,57 @@ const Dashboard = () => {
             <FontAwesomeIcon icon="fa-solid fa-chart-pie" />
           </button>
         </div>
-        <div className="card grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-2">
-          <Card
-            title="Current Balance"
-            name=""
-            value={assets.balance.toFixed(2)}
-          />
-          <Card
-            title="Total Profit/Loss"
-            name=""
-            value={assets.pnl.toFixed(2)}
-            color={true}
-          />
-          <Card
-            title={`Top Gainer`}
-            name={`${assets.gainer.name}`}
-            value={`${
-              assets.gainer.pnl ? parseFloat(assets.gainer.pnl).toFixed(2) : 0.0
-            }`}
-            color={true}
-          />
-          <Card
-            title="Top Loser"
-            name={`${assets.loser.name}`}
-            value={`${
-              assets.loser.pnl ? parseFloat(assets.loser.pnl).toFixed(2) : 0.0
-            }`}
-            color={true}
-          />
-        </div>
+
+        {!Loading ? (
+          <div className="card grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-2">
+            <Card
+              title="Current Balance"
+              name=""
+              value={assets.balance.toFixed(2)}
+            />
+            <Card
+              title="Total Profit/Loss"
+              name=""
+              value={assets.pnl.toFixed(2)}
+              color={true}
+            />
+            <Card
+              title={`Top Gainer`}
+              name={`${assets.gainer.name}`}
+              value={`${
+                assets.gainer.pnl
+                  ? parseFloat(assets.gainer.pnl).toFixed(2)
+                  : 0.0
+              }`}
+              color={true}
+            />
+            <Card
+              title="Top Loser"
+              name={`${assets.loser.name}`}
+              value={`${
+                assets.loser.pnl ? parseFloat(assets.loser.pnl).toFixed(2) : 0.0
+              }`}
+              color={true}
+            />
+          </div>
+        ) : (
+          <div className="card grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-2">
+            <Card title="Current Balance" name="" value={0} />
+            <Card title="Total Profit/Loss" name="" value={0} color={true} />
+            <Card
+              title={`Top Gainer`}
+              name={`${assets.gainer.name}`}
+              value={0}
+              color={true}
+            />
+            <Card
+              title="Top Loser"
+              name={`${assets.loser.name}`}
+              value={0}
+              color={true}
+            />
+          </div>
+        )}
 
         {/* Visual Representations */}
         {graphs && (
