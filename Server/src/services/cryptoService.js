@@ -32,7 +32,7 @@ const getPrice = async (ticker) => {
 };
 
 const fetchAllCryptos = async () => {
-  if (cache["crypto_list"] && cache["crypto_list"].timestamp-Date.now() < 86400 * 1000) {
+  if (cache["crypto_list"] && Date.now()-cache["crypto_list"].timestamp < 86400 * 1000) {
     console.log("from cache")
     return cache["crypto_list"].data;
   }
