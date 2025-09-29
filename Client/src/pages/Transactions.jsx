@@ -117,7 +117,7 @@ const Transactions = () => {
           <div className="flex p-4 items-center">
             <img
               className="w-3 h-3 sm:w-6 sm:h-6 object-contain mr-2"
-              src={`https://img.logokit.com/crypto/${params.id}?token=${C_LOGO}`}
+              src={``}
               alt={`${params.id} logo`}
             />
             <span className="text-2xl font-bold">{params.id}</span>
@@ -128,8 +128,8 @@ const Transactions = () => {
         <div className="mx-4 py-4 mb  -2 border-b border-white">
           <div className="flex items-center">
             <img
-              className="w-3 h-3 sm:w-6 sm:h-6 object-contain mr-2"
-              src={`https://img.logokit.com/crypto/${params.id}?token=${C_LOGO}`}
+              className="w-6 h-6 object-contain mr-2"
+              src={`${apiUrl}${assets.logo}`}
               alt={`${params.id} logo`}
             />
             <span className="text-xl font-bold">{params.id}</span>

@@ -16,8 +16,14 @@ const C_LOGO = import.meta.env.VITE_C_LOGO;
 const Assets = ({ add }) => {
   const navigate = useNavigate();
   const { assets, Loading } = useDash();
+  const [per_asset, setPerassets] = useState([]);
   const { token } = useAuth();
   const [isModalOpen, setModal] = useState(false);
+  const [coinSort, setCoinSort] = useState(null);
+  const [priceSort, setPriceSort] = useState(null);
+  const [amountSort, setAmountSort] = useState(null);
+  const [pnlSort, setPnlSort] = useState(null);
+
   const formatPrice = (price) => {
     let formatted =
       price < 1 && price > 0 ? price.toFixed(10) : price.toFixed(2);
@@ -27,6 +33,9 @@ const Assets = ({ add }) => {
   const transaction = (cryptoName) => {
     navigate(`/transaction/${cryptoName}`);
   };
+  useEffect(() => {
+    setPerassets(assets?.per_asset ?? []);
+  }, [assets]);
 
   return (
     <>
@@ -84,24 +93,120 @@ const Assets = ({ add }) => {
             <thead className="text-xs sm:text-sm">
               <tr>
                 <th className="p-1">#</th>
-                <th className="text-end pr-2">Coin</th>
-                <th className="hidden sm:table-cell text-end">Price</th>
-                <th className="text-end">Amount</th>
+                <th
+                  className="text-end pr-4 cursor-pointer "
+                  onClick={() => {
+                    const newSort = coinSort === "asc" ? "desc" : "asc";
+                    const sorted = [...per_asset].sort((a, b) => {
+                      return newSort === "asc"
+                        ? a.cryptoName.localeCompare(b.cryptoName)
+                        : b.cryptoName.localeCompare(a.cryptoName);
+                    });
+                    setPerassets(sorted);
+                    setCoinSort(newSort);
+                    setPriceSort(null);
+                    setAmountSort(null);
+                    setPnlSort(null);
+                  }}
+                >
+                  Coin{" "}
+                  {coinSort === "asc" ? (
+                    <FontAwesomeIcon icon="fa-solid fa-sort-up" />
+                  ) : coinSort === "desc" ? (
+                    <FontAwesomeIcon icon="fa-solid fa-sort-down" />
+                  ) : (
+                    <FontAwesomeIcon icon="fa-solid fa-sort" />
+                  )}
+                </th>
+                <th
+                  className="hidden sm:table-cell text-end cursor-pointer"
+                  onClick={() => {
+                    const newSort = priceSort === "asc" ? "desc" : "asc";
+                    const sorted = [...per_asset].sort((a, b) => {
+                      return newSort === "asc"
+                        ? a.currPrice - b.currPrice
+                        : b.currPrice - a.currPrice;
+                    });
+                    setPerassets(sorted);
+                    setCoinSort(null);
+                    setPriceSort(newSort);
+                    setAmountSort(null);
+                    setPnlSort(null);
+                  }}
+                >
+                  Price{" "}
+                  {priceSort === "asc" ? (
+                    <FontAwesomeIcon icon="fa-solid fa-sort-up" />
+                  ) : priceSort === "desc" ? (
+                    <FontAwesomeIcon icon="fa-solid fa-sort-down" />
+                  ) : (
+                    <FontAwesomeIcon icon="fa-solid fa-sort" />
+                  )}
+                </th>
+                <th
+                  className="text-end cursor-pointer"
+                  onClick={() => {
+                    const newSort = amountSort === "asc" ? "desc" : "asc";
+                    const sorted = [...per_asset].sort((a, b) => {
+                      return newSort === "asc"
+                        ? a.totalAmt - b.totalAmt
+                        : b.totalAmt - a.totalAmt;
+                    });
+                    setPerassets(sorted);
+                    setCoinSort(null);
+                    setPriceSort(null);
+                    setAmountSort(newSort);
+                    setPnlSort(null);
+                  }}
+                >
+                  Amount{" "}
+                  {amountSort === "asc" ? (
+                    <FontAwesomeIcon icon="fa-solid fa-sort-up" />
+                  ) : amountSort === "desc" ? (
+                    <FontAwesomeIcon icon="fa-solid fa-sort-down" />
+                  ) : (
+                    <FontAwesomeIcon icon="fa-solid fa-sort" />
+                  )}
+                </th>
                 <th className="hidden sm:table-cell text-end">Avg Price</th>
-                <th className="text-end">PNL</th>
+                <th
+                  className="text-end cursor-pointer"
+                  onClick={() => {
+                    const newSort = pnlSort === "asc" ? "desc" : "asc";
+                    const sorted = [...per_asset].sort((a, b) => {
+                      return newSort === "asc"
+                        ? a.returns - b.returns
+                        : b.returns - a.returns;
+                    });
+                    setPerassets(sorted);
+                    setCoinSort(null);
+                    setPriceSort(null);
+                    setAmountSort(null);
+                    setPnlSort(newSort);
+                  }}
+                >
+                  PNL{" "}
+                  {pnlSort === "asc" ? (
+                    <FontAwesomeIcon icon="fa-solid fa-sort-up" />
+                  ) : pnlSort === "desc" ? (
+                    <FontAwesomeIcon icon="fa-solid fa-sort-down" />
+                  ) : (
+                    <FontAwesomeIcon icon="fa-solid fa-sort" />
+                  )}
+                </th>
                 <th className="text-end">Actions</th>
               </tr>
             </thead>
-            <tbody className="text-sm font-semibold sm:text-base">
-              {assets.per_asset && assets.per_asset.length > 0 ? (
-                assets.per_asset.map((tx, idx) => (
+            <tbody className="text-base font-semibold sm:text-base">
+              {per_asset && per_asset.length > 0 ? (
+                per_asset.map((tx, idx) => (
                   <tr key={idx}>
                     <td className="p-2">{idx + 1}</td>
-                    <td className="p-2 flex items-center justify-end">
+                    <td className="p-4 flex items-center justify-end">
                       <div className="flex items-center justify-center min-h-[24px] leading-none">
                         <img
-                          className="w-3 h-3 sm:w-6 sm:h-6 object-contain mr-2"
-                          src={`https://img.logokit.com/crypto/${tx.cryptoName}?token=${C_LOGO}`}
+                          className="w-4 h-4 sm:w-6 sm:h-6 object-contain mr-2"
+                          src={`${apiUrl}${tx.logo}`}
                           alt={`${tx.cryptoName} logo`}
                         />
                         <span className="">{tx.cryptoName}</span>
@@ -110,7 +215,7 @@ const Assets = ({ add }) => {
                     <td className="hidden sm:table-cell text-end">
                       {formatPrice(tx.currPrice)}
                     </td>
-                    <td className="text-end">{tx.totalAmt}</td>
+                    <td className=" text-sm text-end">{tx.totalAmt}</td>
                     <td className="hidden sm:table-cell text-end">
                       {formatPrice(tx.avgBuyPrice)}
                     </td>
@@ -135,7 +240,7 @@ const Assets = ({ add }) => {
                 ))
               ) : (
                 <tr>
-                  <td className="h-6" colSpan={6}>
+                  <td className="h-6" colSpan={7}>
                     No Assets
                   </td>
                 </tr>
