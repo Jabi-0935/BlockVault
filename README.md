@@ -355,6 +355,6 @@ This project is licensed under the MIT License.
 ---
 
 <div align="center">
-  <p>Made with ❤️ by <a href="https://github.com/Jabi-0935">Jabi-0935</a></p>
+  <p>Made with pressure by <a href="https://github.com/Jabi-0935">Jabi-0935</a></p>
   <p>⭐ Star this repository if you find it helpful!</p>
 </div>
