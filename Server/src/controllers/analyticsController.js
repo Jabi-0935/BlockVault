@@ -1,5 +1,9 @@
 const { fetchPortfolioData } = require("./portfolioController");
-const { getPrice,fetchAllCryptos } = require("../services/cryptoService");
+const {
+  getPrice,
+  fetchAllCryptos,
+  getLogo,
+} = require("../services/cryptoService");
 const mongoose = require("mongoose");
 
 const getPortfolioMetrics = async (req, res) => {
@@ -7,19 +11,23 @@ const getPortfolioMetrics = async (req, res) => {
     const user_id = mongoose.Types.ObjectId.createFromHexString(req.user.id);
     const assets = await fetchPortfolioData(user_id);
     let total_balance = 0;
-    let total_buy_price= 0;
+    let total_buy_price = 0;
     let top = { name: null, pnl: -Infinity };
     let loss = { name: null, pnl: Infinity };
 
-    
     const pricePromises = assets.map((asset) => {
       return getPrice(asset.cryptoName);
     });
-    const prices = await Promise.all(pricePromises);
+
+    const logoPromises = assets.map((asset) => getLogo(asset.cryptoName));
     
+    const logos = await Promise.all(logoPromises);
+    const prices = await Promise.all(pricePromises);
+
     const updatedAssets = assets.map((asset, index) => {
       const price = parseFloat(prices[index]);
-      
+      const logo = logos[index];
+
       if (price === null) {
         return {
           ...asset,
@@ -31,13 +39,10 @@ const getPortfolioMetrics = async (req, res) => {
       }
       const returns =
         asset.totalAmt * price - asset.totalAmt * asset.avgBuyPrice;
-      const per_return = (
-        (100 * returns) /
-        (asset.totalAmt * asset.avgBuyPrice)
-      );
-      total_balance+=price*asset.totalAmt;
-      total_buy_price+=asset.totalAmt*asset.avgBuyPrice;
-      
+      const per_return = (100 * returns) / (asset.totalAmt * asset.avgBuyPrice);
+      total_balance += price * asset.totalAmt;
+      total_buy_price += asset.totalAmt * asset.avgBuyPrice;
+
       if (returns > top.pnl) {
         top = { name: asset.cryptoName, pnl: returns };
       }
@@ -48,21 +53,22 @@ const getPortfolioMetrics = async (req, res) => {
 
       return {
         ...asset,
+        logo:logo,
         currPrice: price,
         returns: returns,
         per_return: per_return,
-        holding:price*asset.totalAmt,
+        holding: price * asset.totalAmt,
       };
     });
-    const sortedAssets = updatedAssets.sort((a,b)=>b.holding - a.holding);
-    
+    // @ts-ignore
+    const sortedAssets = updatedAssets.sort((a, b) => b.holding - a.holding);
 
     res.json({
-      gainer:top,
-      loser:loss,
-      balance:total_balance,
-      pnl:total_balance-total_buy_price,
-      per_asset:sortedAssets,
+      gainer: top,
+      loser: loss,
+      balance: total_balance,
+      pnl: total_balance - total_buy_price,
+      per_asset: sortedAssets,
     });
   } catch (error) {
     console.error("Error in getPortfolioMetrics:", error);
@@ -70,18 +76,18 @@ const getPortfolioMetrics = async (req, res) => {
   }
 };
 
-const overview =async (req,res)=>{
-  const updatedAssets = getPortfolioMetrics(req,res);
-}
+const overview = async (req, res) => {
+  const updatedAssets = getPortfolioMetrics(req, res);
+};
 
-const getcryptos = async(req,res)=>{
-  try{
+const getcryptos = async (req, res) => {
+  try {
     const cryptos = await fetchAllCryptos();
     res.json(cryptos);
-  }catch(error){
+  } catch (error) {
     console.error("Error in getting the cryptos");
-    res.status(500).json({error:"An internal server error occurred." })
+    res.status(500).json({ error: "An internal server error occurred." });
   }
-}
+};
 
-module.exports = { getPortfolioMetrics ,getcryptos};
+module.exports = { getPortfolioMetrics, getcryptos };

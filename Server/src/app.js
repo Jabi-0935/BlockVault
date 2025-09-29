@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 
 const authRoutes = require('./routes/authRoutes');
@@ -11,6 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use('/logos', express.static(path.join(__dirname, 'assets/logos')));
 app.use((req,res,next)=>{
     console.log(`${req.method} request on ${req.url}`);
     next();
