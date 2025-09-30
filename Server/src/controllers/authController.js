@@ -3,14 +3,14 @@ const { User } = require("../model/User");
 const {generate_jwt} = require('../config/jwt')
 
 const signup = async (req, res) => {
-  if (await User.findOne({ email: req.body.email })) {
+  if (await User.findOne({ email: req.body.email.toLowerCase() })) {
     return res.status(400).json({ error: "Email already exists" });
   }
   const salt = await bcryptjs.genSalt(10);
   const secpass = await bcryptjs.hash(req.body.password, salt);
   let user = new User({
     name: req.body.name,
-    email: req.body.email,
+    email: req.body.email.toLowerCase(),
     passhash: secpass,
   });
   await user.save();
@@ -21,7 +21,8 @@ const signup = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  let { email, password } = req.body;
+  email = email.toLowerCase();
   let user = await User.findOne({ email });
   if (!user) {
     return res.status(401).json({error: "User not found, if not signed up please signup" });
