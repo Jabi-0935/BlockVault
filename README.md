@@ -9,6 +9,15 @@
 
 BlockVault is a cryptocurrency portfolio management platform currently in **Beta** that enables users to track, analyze, and manage their crypto investments with real-time data and interactive visualizations.
 
+## 🎯 Demo Access
+
+Want to try BlockVault without creating an account? Use these demo credentials:
+
+- **Email**: `demo@gmail.com`
+- **Password**: `123456`
+
+This demo account contains sample portfolio data to showcase all features of the application.
+
 ## 🌟 Features
 
 ### Core Functionality
@@ -179,6 +188,7 @@ BlockVault/
 5. **Access the Application**
    - Frontend: `http://localhost:5173`
    - Backend API: `http://localhost:5000`
+
 
 ## 📋 API Documentation
 
