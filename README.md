@@ -1,6 +1,6 @@
 # BlockVault - Cryptocurrency Portfolio Management Platform
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-blue)](https://blockvault-yks2.onrender.com/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-blue)](https://blockvault.stellars.rocks/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-19+-blue)](https://reactjs.org/)
 [![MongoDB](https://img.shields.io/badge/Database-MongoDB-green)](https://mongodb.com/)
@@ -358,7 +358,7 @@ This project is licensed under the MIT License.
 
 ## 📞 Support & Links
 
-- **Live Demo**: [https://blockvault-yks2.onrender.com/](https://blockvault-yks2.onrender.com/)
+- **Live Demo**: [https://blockvault.stellars.rocks/](https://blockvault.stellars.rocks/)
 - **GitHub Repository**: [https://github.com/Jabi-0935/BlockVault](https://github.com/Jabi-0935/BlockVault)
 - **Issues**: [Report bugs or request features](https://github.com/Jabi-0935/BlockVault/issues)
 
