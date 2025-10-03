@@ -168,7 +168,7 @@ const Transactions = () => {
               name=""
               value={assets.returns.toFixed(2)}
               color={true}
-              className="col-span-2 md:col-span-5 flex flex-row-reverse items-center justify-center gap-2 text-2xl"
+              className="col-span-2 md:col-span-1 flex flex-row-reverse items-center justify-center gap-2 text-2xl"
             />
           </div>
         </div>
