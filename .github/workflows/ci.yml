@@ -7,11 +7,35 @@ on:
     branches: [ "main" ]
 
 jobs:
+  build-client:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Client
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js 18
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+        cache-dependency-path: './Client/package-lock.json'
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Run Tests
+      run: npm test --if-present
+
+    - name: Build Client
+      run: npm run build
+
   build-server:
     runs-on: ubuntu-latest
     defaults:
       run:
-        # This tells GitHub to run commands inside your Server folder
         working-directory: ./Server
 
     steps:
@@ -22,9 +46,32 @@ jobs:
       with:
         node-version: '18.x'
         cache: 'npm'
+        cache-dependency-path: './Server/package-lock.json'
 
     - name: Install Dependencies
       run: npm ci
 
+    - name: Run Tests
+      run: npm test --if-present
+
     - name: Build Check
       run: npm run build --if-present
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: [build-client, build-server]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: false
+        tags: blockvault:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
