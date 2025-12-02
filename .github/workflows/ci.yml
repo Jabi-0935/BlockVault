@@ -9,6 +9,10 @@ on:
 jobs:
   build-server:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        # This tells GitHub to run commands inside your Server folder
+        working-directory: ./Server
 
     steps:
     - uses: actions/checkout@v3
